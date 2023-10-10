@@ -295,9 +295,59 @@ class ShowVaryingLinearCombinations(VectorScene):
             v2, self.vector2_label, color = self.vector2_color, 
             #buff_factor = 3
         )
-        v1_label.add_updater(lambda me: me.move_to((v1.get_end() - v1.get_start()) / 2))
+        
 
-        self.play(v1.animate.shift([1,2,0]))
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.3157))).next_to(v2_label).shift([-1.4,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+    
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.25,0.1,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([0.2,0.5,0])))
+        self.add(textv1, textv2)
+        self.play(
+            v1scaled.animate.scale(1.5).shift([0.25,0.5,0]), 
+            ApplyMethod(v1.fade, 0.7),
+            v2scaled.animate.scale(0.609).shift([-0.6,0.2,0]), 
+            ApplyMethod(v2.fade, 0.7),
+            )
+        self.wait()
+        self.next_section()
+
+
+        self.play(v2scaled.animate.shift([1.5,3,0]))
+
+
+        v3 = self.add_vector(v2scaled.get_end(), color = self.sum_color)
+
+
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+np.array([0.6*3,-0.6,0])))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN,v2scaled.get_end()))
+        
+        self.play(v1scaled.animate.scale(0.468).shift([-0.37,-0.75,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(2.166).shift([1.05,-0.35,0]))
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        #v2scaled.resume_updating()
+        self.play(v1scaled.animate.scale(-1.429).shift([-0.86,-1.75,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(-1.05).shift([-4,1.37,0]))
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1,2,0]))
+        self.wait()
+        
         label_anims = [
             MaintainPositionRelativeTo(label, v)
             for v, label in [(v1, v1_label), (v2, v2_label)]
