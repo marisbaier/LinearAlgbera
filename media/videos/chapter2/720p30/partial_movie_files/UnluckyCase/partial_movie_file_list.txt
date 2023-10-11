@@ -1,0 +1,12 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/5937010_1244778842_3219697009.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_2489669680_410789340.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_3895470493_240547753.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_950445255_3971542074.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_744331083_4001993317.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_4219291462_2467656837.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_3358982226_787145436.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_1389640513_3967428824.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_430228784_1109433810.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_2774634690_3869696453.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/UnluckyCase/909943877_329969645_1569653692.mp4'

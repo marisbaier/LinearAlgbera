@@ -1,0 +1,3 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/EvenMoreUnluckyCase/5937010_2498167464_792985331.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/EvenMoreUnluckyCase/909943877_329969645_2583168887.mp4'

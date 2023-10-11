@@ -1,0 +1,9 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/5937010_3373331368_468027008.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/909943877_1032907501_3184666519.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/909943877_2350329746_887793817.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/909943877_3947013173_3202636921.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/909943877_2138290650_2118167865.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/909943877_3007235260_4100592857.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/909943877_3842095793_3595150090.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/LinearCombinationsWithSumCopies/909943877_3165380332_2898268740.mp4'
