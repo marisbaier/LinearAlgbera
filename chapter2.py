@@ -346,178 +346,608 @@ class ShowVaryingLinearCombinations(VectorScene):
         v2vec = v2scaled.get_end()-v2scaled.get_start()
         v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
         self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1,2,0]))
-        self.wait()
+        #self.wait()
+        v2scaled.clear_updaters()
+        v3.clear_updaters()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v3.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2.5,0]),
+                  v3.animate.put_start_and_end_on(ORIGIN, [2.75,2,0]),)
+        #self.wait()
+        v2scaled.clear_updaters()
+        v2now = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2now))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN, v2scaled.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
+
+class NameLinearCombinations(VectorScene):
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+
+        numberplane = NumberPlane()
+        self.add(numberplane)
+
+        self.next_section()
+        v1 = self.add_vector(self.vector1, color = self.vector1_color)
+        self.next_section()
+        v2 = self.add_vector(self.vector2, color = self.vector2_color)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color, 
+            #buff_factor = 3
+        )
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color, 
+            #buff_factor = 3
+        )
+
+        rectangle = Rectangle(color=config.background_color, width=5.5, height=2.4, 
+                              stroke_width=250).to_edge(UP+LEFT, buff=0)
+        self.add(rectangle)
+        text = Tex(r'''"Linearkombinationen" von $\vec{v}$ und $\vec{w}$''', font_size=35)
+        text[0][24:26].set_color(self.vector1_color)
+        text[0][29:33].set_color(self.vector2_color)
+        text.to_edge(UP+LEFT, buff=0.35)
+
+        formula = Tex(r'''$\lambda_1\vec{v}+\lambda_2\vec{w}$''')
+        formula.next_to(text, DOWN, buff=0.7)
+        formula[0][2:4].set_color(self.vector1_color)
+        formula[0][7:9].set_color(self.vector2_color)
+
+        Skalare = Tex("Skalare", font_size=35)
+        Skalare.next_to(formula, DOWN, buff=1)
+
+        twovectors = VGroup(*[
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-4.1,1.5,0],[-4.55,2.05,0]),
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-3.7,1.5,0],[-3.45,2.05,0]),
+            ])
+        twovectors.set_color(YELLOW)
+
+        #Terminologie = VGroup(*[rectangle,text,formula,Skalare,twovectors]).z_index(50)
+
+        self.play(Write(text), Write(formula), Write(Skalare), Create(twovectors))
+
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
         
-        label_anims = [
-            MaintainPositionRelativeTo(label, v)
-            for v, label in [(v1, v1_label), (v2, v2_label)]
-        ]
-        #scalar_anims = self.get_scalar_anims(v1, v2, v1_label, v2_label)
-        self.last_scalar_pair = (1, 1)
-
-        """ if self.start_with_non_sum_scaling:
-            self.initial_scaling(v1, v2, label_anims, scalar_anims)
-        self.show_sum(v1, v2, label_anims, scalar_anims)
-        self.scale_with_sum(v1, v2, label_anims, scalar_anims)
-        if self.finish_with_standard_basis_comparison:
-            self.standard_basis_comparison(label_anims, scalar_anims)
-        if self.finish_by_drawing_lines:
-            self.draw_lines(v1, v2, label_anims, scalar_anims) """
-
-    def get_scalar_anims(self, v1, v2, v1_label, v2_label):
-        def get_val_func(vect):
-            original_vect = np.array(vect.get_end()-vect.get_start())
-            square_norm = np.linalg.norm(original_vect)**2
-            return lambda a : np.dot(
-                original_vect, vect.get_end()-vect.get_start()
-            )/square_norm
-        return [
-            RangingValues(
-                tracked_mobject = label,
-                tracked_mobject_next_to_kwargs = {
-                    "direction" : LEFT,
-                    "buff" : 0.1
-                },
-                scale_factor = 0.75,
-                value_function = get_val_func(v)
-            )   
-            for v, label in [(v1, v1_label), (v2, v2_label)]
-        ]
-
-    def get_rate_func_pair(self):
-        return [
-            squish_rate_func(smooth, a, b) 
-            for a, b in [(0, 0.7), (0.3, 1)]
-        ] 
-
-    def initial_scaling(self, v1, v2, label_anims, scalar_anims):
-        scalar_pair = self.scalar_pairs.pop(0)
-        anims = [
-            ApplyMethod(v.scale, s, rate_func = rf)
-            for v, s, rf in zip(
-                [v1, v2],
-                scalar_pair,
-                self.get_rate_func_pair()
-            )
-        ]
-        anims += [
-            ApplyMethod(v.copy().fade, 0.7)
-            for v in (v1, v2)
-        ]
-        anims += label_anims + scalar_anims
-        self.play(*anims, **{"run_time" : 2})
-        self.wait()
-        self.last_scalar_pair = scalar_pair
-
-    def show_sum(self, v1, v2, label_anims, scalar_anims):
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.3157))).next_to(v2_label).shift([-1.4,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+    
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.25,0.1,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([0.2,0.5,0])))
+        self.add(textv1, textv2)
         self.play(
-            ApplyMethod(v2.shift, v1.get_end()),
-            *label_anims + scalar_anims
-        )
-        self.sum_vector = self.add_vector(
-            v2.get_end(), color = self.sum_color
-        )
+            v1scaled.animate.scale(1.5).shift([0.25,0.5,0]), 
+            ApplyMethod(v1.fade, 0.7),
+            v2scaled.animate.scale(0.609).shift([-0.6,0.2,0]), 
+            ApplyMethod(v2.fade, 0.7),
+            )
         self.wait()
+        self.next_section()
 
-    def scale_with_sum(self, v1, v2, label_anims, scalar_anims):
-        v2_anim, sum_anim = self.get_sum_animations(v1, v2)
-        while self.scalar_pairs:
-            scalar_pair = self.scalar_pairs.pop(0)
-            anims = [
-                ApplyMethod(v.scale, s/s_old, rate_func = rf)
-                for v, s, s_old, rf in zip(
-                    [v1, v2], 
-                    scalar_pair, 
-                    self.last_scalar_pair,
-                    self.get_rate_func_pair()
-                )
+
+        self.play(v2scaled.animate.shift([1.5,3,0]))
+
+
+        v3 = self.add_vector(v2scaled.get_end(), color = self.sum_color)
+
+
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+np.array([0.6*3,-0.6,0])))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN,v2scaled.get_end()))
+        
+        self.play(v1scaled.animate.scale(0.468).shift([-0.37,-0.75,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(2.166).shift([1.05,-0.35,0]))
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        #v2scaled.resume_updating()
+        self.play(v1scaled.animate.scale(-1.429).shift([-0.86,-1.75,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(-1.05).shift([-4,1.37,0]))
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1,2,0]))
+        #self.wait()
+        v2scaled.clear_updaters()
+        v3.clear_updaters()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v3.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2.5,0]),
+                  v3.animate.put_start_and_end_on(ORIGIN, [2.75,2,0]),)
+        #self.wait()
+        v2scaled.clear_updaters()
+        v2now = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2now))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN, v2scaled.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
+
+class LinearCombinationsWithSumCopies(VectorScene):
+
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+        self.scalar_pairs = [
+                (1.5, 0.6),
+                (0.7, 1.3),
+                (-1, -1.5),
+                (1, -1.13),
+                (1.25, 0.5),
+                (-0.8, 1.3),
             ]
-            anims += [v2_anim, sum_anim] + label_anims + scalar_anims
-            self.play(*anims, **{"run_time" : 2})
-            if self.leave_sum_vector_copies:
-                self.add(self.sum_vector.copy())
-            self.wait()
-            self.last_scalar_pair = scalar_pair
+        self.leave_sum_vector_copies = False
+        self.start_with_non_sum_scaling = True
+        self.finish_with_standard_basis_comparison = True
+        self.finish_by_drawing_lines = False
 
-    def get_sum_animations(self, v1, v2):
-        v2_anim = UpdateFromFunc(
-            v2, lambda m : m.shift(v1.get_end()-m.get_start())
+        numberplane = NumberPlane(faded_line_ratio=2) #background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
+        self.add(numberplane)
+        #self.lock_in_faded_grid()
+        self.next_section()
+        v1 = self.add_vector(self.vector1, color = self.vector1_color, animate=False)
+        self.next_section()
+        v2 = self.add_vector(self.vector2, color = self.vector2_color, animate=False)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color, animate=False
+            #buff_factor = 3
         )
-        sum_anim = UpdateFromFunc(
-            self.sum_vector, 
-            lambda v : v.put_start_and_end_on(v1.get_start(), v2.get_end())
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color, animate=False
+            #buff_factor = 3
         )
-        return v2_anim, sum_anim
+        
 
-    def standard_basis_comparison(self, label_anims, scalar_anims):
-        everything = self.get_mobjects()
-        everything.remove(self.sum_vector)
-        everything = VMobject(*everything)
-        alt_coords = [a.mobject for a in scalar_anims]
-        array = Matrix([
-            mob.copy().set_color(color)
-            for mob, color in zip(
-                alt_coords, 
-                [self.vector1_color, self.vector2_color]
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.3157))).next_to(v2_label).shift([-1.4,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+        self.remove(v1,v2)
+    
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.25,0.1,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([0.2,0.5,0])))
+        self.add(textv1, textv2)
+        v1scaled.scale(1.5).shift([0.25,0.5,0])
+        v2scaled.scale(0.609).shift([-0.6,0.2,0])
+        """ self.play(
+            v1scaled.animate.scale(1.5).shift([0.25,0.5,0]), 
+            #ApplyMethod(v1.fade, 0.7),
+            v2scaled.animate.scale(0.609).shift([-0.6,0.2,0]), 
+            #ApplyMethod(v2.fade, 0.7),
+            ) """
+
+        v2scaled.shift([1.5,3,0])
+
+
+        v3 = self.add_vector(v2scaled.get_end(), color = self.sum_color, animate=False)
+        self.add(v3)
+        self.add(v3.copy().clear_updaters())
+
+        
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+np.array([0.6*3,-0.6,0])))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN,v2scaled.get_end()))
+        
+        self.add(v2scaled)  #####   remove if still a problem
+        self.play(v1scaled.animate.scale(0.468).shift([-0.37,-0.75,0]))
+        self.add(v3.copy().clear_updaters())
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(2.166).shift([1.05,-0.35,0]))
+        self.add(v3.copy().clear_updaters())
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        #v2scaled.resume_updating()
+        self.play(v1scaled.animate.scale(-1.429).shift([-0.86,-1.75,0]))
+        self.add(v3.copy().clear_updaters())
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(-1.05).shift([-4,1.37,0]))
+        self.add(v3.copy().clear_updaters())
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1,2,0]))
+        self.add(v3.copy().clear_updaters())
+        #self.wait()
+        v2scaled.clear_updaters()
+        v3.clear_updaters()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v3.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2.5,0]),
+                  v3.animate.put_start_and_end_on(ORIGIN, [2.75,2,0]),)
+        self.add(v3.copy().clear_updaters())
+        #self.wait()
+        v2scaled.clear_updaters()
+        v2now = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2now))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN, v2scaled.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
+        self.add(v3.copy().clear_updaters())
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
+        self.add(v3.copy().clear_updaters())
+
+class UnluckyCase(VectorScene):
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+        self.scalar_pairs = [
+                (1.5, 0.6),
+                (0.7, 1.3),
+                (-1, -1.5),
+                (1, -1.13),
+                (1.25, 0.5),
+                (-0.8, 1.3),
+            ]
+        numberplane = NumberPlane(faded_line_ratio=2)
+        self.add(numberplane)
+        v1=self.add_vector([1,2], color=MAROON_C)
+        v2=self.add_vector([0.5,1], color=BLUE)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color,
+        )
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color,
+        )
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.9))).next_to(v2_label).shift([-1.35,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+        self.remove(v2)
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.05,0.5,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([-0.3,0.2,0])))
+        self.add(textv1, textv2)
+
+        self.play(v2scaled.animate.shift(v1scaled.get_end()))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.remove(v1)
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.5,3,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [0.7,2*0.7,0]))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-1,-2,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[-0.75,-1.5,0]))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2*1.25,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
+        self.wait()
+
+class EvenMoreUnluckyCase(VectorScene):
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+        self.scalar_pairs = [
+                (1.5, 0.6),
+                (0.7, 1.3),
+                (-1, -1.5),
+                (1, -1.13),
+                (1.25, 0.5),
+                (-0.8, 1.3),
+            ]
+        numberplane = NumberPlane(faded_line_ratio=2)
+        self.add(numberplane)
+        v1=self.add_vector([1,2], color=MAROON_C, animate=False)
+        v2=self.add_vector([3,-1], color=BLUE, animate=False)
+        self.add(v1,v2)
+        dot = Dot()
+        self.play(Transform(v1,dot), Transform(v2, dot))
+        self.wait()
+
+class NameLinearCombinations(VectorScene):
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+
+        numberplane = NumberPlane()
+        self.add(numberplane)
+
+        self.next_section()
+        v1 = self.add_vector(self.vector1, color = self.vector1_color)
+        self.next_section()
+        v2 = self.add_vector(self.vector2, color = self.vector2_color)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color, 
+            #buff_factor = 3
+        )
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color, 
+            #buff_factor = 3
+        )
+
+        rectangle = Rectangle(color=config.background_color, width=5.7, height=2.5, 
+                              stroke_width=250).to_edge(UP+LEFT, buff=0)
+        self.add(rectangle)
+        text = Tex(r'''Der "Spann" von $\vec{v}$ und $\vec{w}$\\ist die Menge aller Linearkombinationen''', font_size=35)
+        text[0][13:15].set_color(self.vector1_color)
+        text[0][18:20].set_color(self.vector2_color)
+        text.to_edge(UP+LEFT, buff=0.35)
+
+        formula = Tex(r'''$\lambda_1\vec{v}+\lambda_2\vec{w}$''')
+        formula.next_to(text, DOWN, buff=0.7)
+        formula[0][2:4].set_color(self.vector1_color)
+        formula[0][7:9].set_color(self.vector2_color)
+
+        Skalare = Tex("Alle möglichen Faktoren", font_size=35)
+        Skalare.next_to(formula, DOWN, buff=1)
+
+        twovectors = VGroup(*[
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-4.1,1.5,0],[-4.55,2.05,0]),
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-3.7,1.5,0],[-3.45,2.05,0]),
+            ])
+        twovectors.set_color(YELLOW).shift([0.3,-0.5,0])
+
+        #Terminologie = VGroup(*[rectangle,text,formula,Skalare,twovectors]).z_index(50)
+
+        self.play(Write(text), Write(formula), Write(Skalare), Create(twovectors))
+
+        
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.3157))).next_to(v2_label).shift([-1.4,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+    
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.25,0.1,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([0.2,0.5,0])))
+        self.add(textv1, textv2)
+        self.play(
+            v1scaled.animate.scale(1.5).shift([0.25,0.5,0]), 
+            ApplyMethod(v1.fade, 0.7),
+            v2scaled.animate.scale(0.609).shift([-0.6,0.2,0]), 
+            ApplyMethod(v2.fade, 0.7),
             )
-        ])
-        array.scale(0.8)
-        array.to_edge(UP)
-        array.shift(RIGHT)
-        brackets = array.get_brackets()
-
-        anims = [
-            Transform(*pair)
-            for pair in zip(alt_coords, array.get_mob_matrix().flatten())
-        ]
-        # anims += [
-        #     FadeOut(a.mobject)
-        #     for a in label_anims
-        # ]
-        self.play(*anims + [Write(brackets)])
         self.wait()
-        self.remove(brackets, *alt_coords)
-        self.add(array)
-        self.play(
-            FadeOut(everything), 
-            Animation(array),
-        )
+        self.next_section()
 
-        self.add_axes(animate = True)
-        ij_array, x_line, y_line = self.vector_to_coords(
-            self.sum_vector, integer_labels = False
+
+        self.play(v2scaled.animate.shift([1.5,3,0]))
+
+
+        v3 = self.add_vector(v2scaled.get_end(), color = self.sum_color)
+
+
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+np.array([0.6*3,-0.6,0])))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN,v2scaled.get_end()))
+        
+        self.play(v1scaled.animate.scale(0.468).shift([-0.37,-0.75,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(2.166).shift([1.05,-0.35,0]))
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        #v2scaled.resume_updating()
+        self.play(v1scaled.animate.scale(-1.429).shift([-0.86,-1.75,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(-1.05).shift([-4,1.37,0]))
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1,2,0]))
+        #self.wait()
+        v2scaled.clear_updaters()
+        v3.clear_updaters()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v3.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2.5,0]),
+                  v3.animate.put_start_and_end_on(ORIGIN, [2.75,2,0]),)
+        #self.wait()
+        v2scaled.clear_updaters()
+        v2now = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2now))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN, v2scaled.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
+
+        self.next_section()
+
+        self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label)
+        v1=self.add_vector([1,2], color=MAROON_C)
+        v2=self.add_vector([0.5,1], color=BLUE)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color,
         )
-        self.add(ij_array, x_line, y_line)
-        x, y = ij_array.get_mob_matrix().flatten()
-        self.play(
-            ApplyMethod(x.set_color, GREEN),
-            ApplyMethod(y.set_color, RED),
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color,
         )
-        neq = OldTex("\\neq")
-        neq.next_to(array)
-        self.play(
-            ApplyMethod(ij_array.next_to, neq),
-            Write(neq)
-        )
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.9))).next_to(v2_label).shift([-1.35,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+        self.remove(v2)
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.05,0.5,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([-0.3,0.2,0])))
+        self.add(textv1, textv2)
+
+        self.play(v2scaled.animate.shift(v1scaled.get_end()))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.remove(v1)
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.5,3,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [0.7,2*0.7,0]))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-1,-2,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[-0.75,-1.5,0]))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2*1.25,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
 
-    def draw_lines(self, v1, v2, label_anims, scalar_anims):
-        sum_anims = self.get_sum_animations(v1, v2)
-        aux_anims = list(sum_anims) + label_anims + scalar_anims
+        self.next_section()
+        self.remove(v2scaled,v1scaled,textv1,textv2,v1_label,v2_label)
+        v1=self.add_vector([1,2], color=MAROON_C, animate=False)
+        v2=self.add_vector([3,-1], color=BLUE, animate=False)
+        self.add(v1,v2)
+        dot = Dot()
+        self.play(Transform(v1,dot), Transform(v2, dot))
+        self.wait()
 
-        scale_factor = 2
-        for w1, w2 in (v2, v1), (v1, v2):
-            w1_vect = w1.get_end()-w1.get_start()
-            w2_vect = w2.get_end()-w2.get_start()
-            for num in scale_factor, -1, -1./scale_factor:
-                curr_tip = self.sum_vector.get_end()
-                line = Line(ORIGIN, curr_tip)
-                self.play(
-                    ApplyMethod(w2.scale, num), 
-                    UpdateFromFunc(
-                        line, lambda l : l.put_start_and_end_on(curr_tip, self.sum_vector.get_end())
-                    ),
-                    *aux_anims
-                )
-                self.add(line, v2)
-            self.wait()
+
+        
+
+        self.next_section()
+        self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label)
+
+        v1 = self.add_vector(self.vector1, color = self.vector1_color, animate=False)
+        self.next_section()
+        v2 = self.add_vector(self.vector2, color = self.vector2_color, animate=False)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color, animate=False
+            #buff_factor = 3
+        )
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color, animate=False
+            #buff_factor = 3
+        )
+        
+
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.3157))).next_to(v2_label).shift([-1.4,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+        self.remove(v1,v2)
+    
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.25,0.1,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([0.2,0.5,0])))
+        self.add(textv1, textv2)
+        v1scaled.scale(1.5).shift([0.25,0.5,0])
+        v2scaled.scale(0.609).shift([-0.6,0.2,0])
+        """ self.play(
+            v1scaled.animate.scale(1.5).shift([0.25,0.5,0]), 
+            #ApplyMethod(v1.fade, 0.7),
+            v2scaled.animate.scale(0.609).shift([-0.6,0.2,0]), 
+            #ApplyMethod(v2.fade, 0.7),
+            ) """
+
+        v2scaled.shift([1.5,3,0])
+
+
+        v3 = self.add_vector(v2scaled.get_end(), color = self.sum_color, animate=False)
+        self.add(v3)
+        self.add(v3.copy().clear_updaters())
+
+        
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+np.array([0.6*3,-0.6,0])))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN,v2scaled.get_end()))
+        
+        self.add(v2scaled)  #####   remove if still a problem
+        self.play(v1scaled.animate.scale(0.468).shift([-0.37,-0.75,0]))
+        self.add(v3.copy().clear_updaters())
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(2.166).shift([1.05,-0.35,0]))
+        self.add(v3.copy().clear_updaters())
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        #v2scaled.resume_updating()
+        self.play(v1scaled.animate.scale(-1.429).shift([-0.86,-1.75,0]))
+        self.add(v3.copy().clear_updaters())
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.scale(-1.05).shift([-4,1.37,0]))
+        self.add(v3.copy().clear_updaters())
+        v2vec = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2vec))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1,2,0]))
+        self.add(v3.copy().clear_updaters())
+        #self.wait()
+        v2scaled.clear_updaters()
+        v3.clear_updaters()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v3.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2.5,0]),
+                  v3.animate.put_start_and_end_on(ORIGIN, [2.75,2,0]),)
+        self.add(v3.copy().clear_updaters())
+        #self.wait()
+        v2scaled.clear_updaters()
+        v2now = v2scaled.get_end()-v2scaled.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2now))
+        v3.add_updater(lambda me: me.put_start_and_end_on(ORIGIN, v2scaled.get_end()))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
+        self.add(v3.copy().clear_updaters())
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
+        self.add(v3.copy().clear_updaters())
