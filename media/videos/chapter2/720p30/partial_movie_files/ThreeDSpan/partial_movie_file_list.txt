@@ -1,0 +1,7 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/Maris/Documents/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/ThreeDSpan/1481841690_3478138282_2466222451.mp4'
+file 'file:C:/Users/Maris/Documents/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/ThreeDSpan/425212695_411490249_4170970296.mp4'
+file 'file:C:/Users/Maris/Documents/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/ThreeDSpan/1967566330_795458434_3642412255.mp4'
+file 'file:C:/Users/Maris/Documents/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/ThreeDSpan/3158362103_2059992092_1361683858.mp4'
+file 'file:C:/Users/Maris/Documents/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/ThreeDSpan/2219558824_3329262715_3274616152.mp4'
+file 'file:C:/Users/Maris/Documents/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/ThreeDSpan/1724249287_795458434_1795480472.mp4'
