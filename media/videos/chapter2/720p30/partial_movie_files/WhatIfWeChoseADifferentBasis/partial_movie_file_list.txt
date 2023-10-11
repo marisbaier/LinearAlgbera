@@ -1,0 +1,3 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/WhatIfWeChoseADifferentBasis/5937010_1952346024_223132457.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/WhatIfWeChoseADifferentBasis/909943877_125286499_1257497235.mp4'

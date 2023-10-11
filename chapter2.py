@@ -802,7 +802,7 @@ class NameLinearCombinations(VectorScene):
 
         self.next_section()
 
-        self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label)
+        self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label,v1,v2)
         v1=self.add_vector([1,2], color=MAROON_C)
         v2=self.add_vector([0.5,1], color=BLUE)
         v1_label = self.label_vector(
