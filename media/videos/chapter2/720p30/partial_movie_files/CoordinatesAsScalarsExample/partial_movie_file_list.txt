@@ -12,4 +12,4 @@ file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_
 file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/CoordinatesAsScalarsExample/909943877_329969645_1284350199.mp4'
 file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/CoordinatesAsScalarsExample/909943877_1826542952_4052808047.mp4'
 file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/CoordinatesAsScalarsExample/909943877_329969645_1507021110.mp4'
-file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/CoordinatesAsScalarsExample/909943877_1738488866_829928216.mp4'
+file 'file:C:/GitHub/Brueckenkursvortraege/media/videos/chapter2/720p30/partial_movie_files/CoordinatesAsScalarsExample/909943877_328425149_829928216.mp4'

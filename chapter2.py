@@ -247,7 +247,7 @@ class CoordinatesAsScalarsExample(VectorScene):
 
         print(self.mobjects)
         self.play(Transform(label, equa))
-        self.next_section()
+# TODO: Transform(label, equa) is not working as it should
 
 class WhatIfWeChoseADifferentBasis(Scene):
     def construct(self):
@@ -386,6 +386,7 @@ class NameLinearCombinations(VectorScene):
             v2, self.vector2_label, color = self.vector2_color, 
             #buff_factor = 3
         )
+        self.next_section()
 
         rectangle = Rectangle(color=config.background_color, width=5.5, height=2.4, 
                               stroke_width=250).to_edge(UP+LEFT, buff=0)
@@ -952,13 +953,34 @@ class NameLinearCombinations(VectorScene):
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
 
-""" class VectorsVSPoints(Scene):
+class JustSome3DVectors(ThreeDScene):
     def construct(self):
-        self.play(Write(
-            Tex("Vektoren vs. Punkte"),
-            run_time = 2
-        ))
-        self.wait(2) """
+        axes = ThreeDAxes()
+        a = np.array([1.5,-1.5,1.5])
+        b = np.array([0,1,-1])
+        v1 = Vector(a, color=MAROON_C)
+        v2 = Vector(b, color=BLUE)
+        self.add(axes,v1,v2)
+        text = Tex(r'''Spann($\vec{v},\vec{w}$)?''')
+        text[0][6:8].set_color(MAROON_C)
+        text[0][9:11].set_color(BLUE)
+        text.to_corner(UP+RIGHT)
+
+        self.add(axes,v1,v2)
+        self.add_fixed_in_frame_mobjects(text)
+
+        self.set_camera_orientation(phi=80*DEGREES,theta=-45*DEGREES)
+
+        self.begin_ambient_camera_rotation(
+            rate=PI/7, about="theta",
+        )
+        #self.wait(8)
+        self.play(Write(Tex(r"")))
+        self.wait(8)
+
+class WasIstDerSpann(Scene):
+    def construct(self):
+        self.play(Write(Tex(r"Was ist der Spann im $\mathbb{R}^3$?")))
 
 class ThreeDSpan(ThreeDScene):
     def construct(self):
@@ -970,17 +992,19 @@ class ThreeDSpan(ThreeDScene):
         v2 = Vector(b, color=BLUE)
 
         text = Tex(r'''Spann($\vec{v},\vec{w}$)?''')
+        text[0][6:8].set_color(MAROON_C)
+        text[0][9:11].set_color(BLUE)
         text.to_corner(UP+RIGHT)
 
         self.add(axes,v1,v2)
+        self.add_fixed_in_frame_mobjects(text)
 
         self.set_camera_orientation(phi=80*DEGREES,theta=-45*DEGREES)
 
         self.begin_ambient_camera_rotation(
             rate=PI/10, about="theta",
         )
-        self.play(Write(text))
-        #self.wait(2)
+        self.wait(2)
         shift = -(a+b)
         #poly = Polygon(np.array([2*a,ORIGIN,2*b,2*(a+b)])*2-(a+b), fill_color=GREY)
         poly = Polygon(2.5*a+shift,ORIGIN+shift, 2*b+shift,2.5*(a+b)+shift, fill_color=GREY)
@@ -989,7 +1013,156 @@ class ThreeDSpan(ThreeDScene):
         self.wait(2)
         startingv2 = v2.get_end()-v2.get_start()
         self.play(v2.animate.put_start_and_end_on(v1.get_end(),v1.get_end()+startingv2))
-        v2.add_updater(lambda me: me.put_start_and_end_on(v1.get_end(),v1.get_end()+startingv2))
-        self.play(v1.animate.put_start_and_end_on(ORIGIN, [-1.5,1.5,-1.5]))
+        self.wait(6)
+        self.play(v2.animate.put_start_and_end_on(v1.get_end(),a-startingv2-np.array([0,0.05,0])))
+        self.wait(1)
+        v2.add_updater(lambda me: me.put_start_and_end_on(v1.get_end(),v1.get_end()-startingv2-np.array([0,0.05,0])))
+        self.play(v1.animate.put_start_and_end_on(ORIGIN,-b*0.5))
+        self.wait(8)
+
+class WhatAboutThreeVectors(ThreeDScene):
+    def construct(self):
+        axes = ThreeDAxes()
+        a = np.array([1.5,-1.5,1.5])
+        b = np.array([0,1,1])
+        v1 = Vector(a, color=MAROON_C)
+        v2 = Vector(b, color=BLUE)
+        self.add(axes,v1,v2)
+        text = Tex(r'''Spann($\vec{v},\vec{w}, \vec{u}$)?''')
+        text[0][6:8].set_color(MAROON_C)
+        text[0][9:11].set_color(BLUE)
+        text[0][12:14].set_color(RED)
+        text.to_corner(UP+RIGHT)
+
+        self.add(axes,v1,v2)
+        self.add_fixed_in_frame_mobjects(text)
+
+        self.set_camera_orientation(phi=80*DEGREES,theta=-45*DEGREES)
+
+        self.begin_ambient_camera_rotation(
+            rate=PI/7, about="theta",
+        )
+        #self.wait(8)
+        shift = -(a+b)
+        #poly = Polygon(np.array([2*a,ORIGIN,2*b,2*(a+b)])*2-(a+b), fill_color=GREY)
+        poly = Polygon(2.5*a+shift,ORIGIN+shift, 2*b+shift,2.5*(a+b)+shift, fill_color=GREY)
+        self.wait(1)
+        self.play(Create(poly))
+        c = np.array([-3,-1.5,1.5])
+        self.wait(3.5)
+        v3 = Vector(c, color=RED)
+        self.play(Create(v3))
+        self.wait(4)
+
+        group = VGroup(*[v1,v2,poly])
+
+        self.play(group.animate.shift(c))
+        self.wait(1)
+        self.play(group.animate.shift(-0.5*c))
+        self.wait(1)
+        self.play(group.animate.shift(-0.1*c))
+        self.play(group.animate.shift(0.2*c))
+        self.play(group.animate.shift(-1.2*c))
+        self.play(group.animate.shift(2*c))
+        self.play(group.animate.shift(-0.4*c))
+        self.wait(8)
+
+class LinearDependence(ThreeDScene):
+    def construct(self):
+        axes = ThreeDAxes()
+        a = np.array([1.5,-1.5,1.5])
+        b = np.array([0,1,1])
+        v1 = Vector(a, color=MAROON_C)
+        v2 = Vector(b, color=BLUE)
+        self.add(axes,v1,v2)
+        text = Tex(r'''"Lineare Abhängigkeit""''').add_background_rectangle()
+        text.to_corner(UP+RIGHT)
+
+        self.add(axes,v1,v2)
+
+        self.set_camera_orientation(phi=80*DEGREES,theta=-45*DEGREES)
+
+        self.begin_ambient_camera_rotation(
+            rate=PI/7, about="theta",
+        )
+        #self.wait(8)
+        shift = -(a+b)
+        #poly = Polygon(np.array([2*a,ORIGIN,2*b,2*(a+b)])*2-(a+b), fill_color=GREY)
+        poly = Polygon(2.5*a+shift,ORIGIN+shift, 2*b+shift,2.5*(a+b)+shift, fill_color=GREY)
+        self.wait(1)
+        self.play(Create(poly))
+        c = (a+b)/2
+        self.wait(3.5)
+        v3 = Vector(c, color=RED)
+        self.play(Create(v3))
         self.wait(2)
-        #self.wait()
+        self.add_fixed_in_frame_mobjects(text)
+        self.wait(8)
+
+class LinearDependence2(VectorScene):
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+        self.scalar_pairs = [
+                (1.5, 0.6),
+                (0.7, 1.3),
+                (-1, -1.5),
+                (1, -1.13),
+                (1.25, 0.5),
+                (-0.8, 1.3),
+            ]
+        numberplane = NumberPlane(faded_line_ratio=2)
+        self.add(numberplane)
+        text = Tex(r'''"Lineare Abhängigkeit""''').add_background_rectangle()
+        text.to_corner(UP+RIGHT)
+        self.add(text)
+        v1=self.add_vector([1,2], color=MAROON_C)
+        v2=self.add_vector([0.5,1], color=BLUE)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color,
+        )
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color,
+        )
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.9))).next_to(v2_label).shift([-1.35,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+        self.remove(v2)
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.05,0.5,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([-0.3,0.2,0])))
+        self.add(textv1, textv2)
+
+        self.play(v2scaled.animate.shift(v1scaled.get_end()))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.remove(v1)
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.5,3,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [0.7,2*0.7,0]))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-1,-2,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[-0.75,-1.5,0]))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2*1.25,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
+        self.wait()
