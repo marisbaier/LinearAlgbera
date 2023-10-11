@@ -951,3 +951,45 @@ class NameLinearCombinations(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
+
+""" class VectorsVSPoints(Scene):
+    def construct(self):
+        self.play(Write(
+            Tex("Vektoren vs. Punkte"),
+            run_time = 2
+        ))
+        self.wait(2) """
+
+class ThreeDSpan(ThreeDScene):
+    def construct(self):
+
+        axes = ThreeDAxes()
+        a = np.array([1.5,-1.5,1.5])
+        b = np.array([0,1,1])
+        v1 = Vector(a, color=MAROON_C)
+        v2 = Vector(b, color=BLUE)
+
+        text = Tex(r'''Spann($\vec{v},\vec{w}$)?''')
+        text.to_corner(UP+RIGHT)
+
+        self.add(axes,v1,v2)
+
+        self.set_camera_orientation(phi=80*DEGREES,theta=-45*DEGREES)
+
+        self.begin_ambient_camera_rotation(
+            rate=PI/10, about="theta",
+        )
+        self.play(Write(text))
+        #self.wait(2)
+        shift = -(a+b)
+        #poly = Polygon(np.array([2*a,ORIGIN,2*b,2*(a+b)])*2-(a+b), fill_color=GREY)
+        poly = Polygon(2.5*a+shift,ORIGIN+shift, 2*b+shift,2.5*(a+b)+shift, fill_color=GREY)
+
+        self.play(Create(poly))
+        self.wait(2)
+        startingv2 = v2.get_end()-v2.get_start()
+        self.play(v2.animate.put_start_and_end_on(v1.get_end(),v1.get_end()+startingv2))
+        v2.add_updater(lambda me: me.put_start_and_end_on(v1.get_end(),v1.get_end()+startingv2))
+        self.play(v1.animate.put_start_and_end_on(ORIGIN, [-1.5,1.5,-1.5]))
+        self.wait(2)
+        #self.wait()
