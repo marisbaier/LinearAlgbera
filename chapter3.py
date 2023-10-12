@@ -375,7 +375,7 @@ class Back(Scene):
                   )
         self.wait()
 
-class TransformInfiniteGridWithBackground(LinearTransformationScene):
+class TransformInfiniteGridWithBackground2(LinearTransformationScene):
     def __init__(self):
         LinearTransformationScene.__init__(
             self,
@@ -741,6 +741,33 @@ class TrackBasisVectorsExample(LinearTransformationScene):
 
         self.show_linear_combination(shift=[[-1,2,0],[1.5,0,0]])
 
+        self.next_section()
+
+        v_def = Tex(r'''Neuer $\vec{\textbf{v}}=-1 (neuer) \vec{\textbf{e}}_x+2 (neuer) \vec{\textbf{e}}_y$''')
+        v_def[0][0:8].set_color(YELLOW)
+        v_def[0][10:20].set_color(GREEN)
+        v_def[0][22:34].set_color(RED)
+        v_def.add_background_rectangle()
+        v_def.to_corner(UP + LEFT).shift([0,-1,0])
+        self.v_def = v_def
+
+        self.play(Write(self.v_def))
+
+        self.next_section()
+
+        t1=Tex("=-1")
+        m1 = Matrix([[1],[-2]]).set_row_colors(GREEN,GREEN)
+        t2 = Tex("+2")
+        m2 = Matrix([[3],[0]]).set_row_colors(RED,RED)
+        group1 = VGroup(t1,m1,t2,m2).arrange().next_to(self.v_def,DOWN).to_edge(LEFT).add_background_rectangle()
+        self.play(Write(group1))
+        self.next_section()
+        m3 = Matrix([["-1(1)+2(3)"],["-1(-2)+2(0)"]])
+        t3 = Tex("=")
+        m4 = Matrix([[5],[2]])
+        t4 = Tex("=")
+        group2 = VGroup(t3,m3,t4,m4).arrange().next_to(group1,DOWN).add_background_rectangle().scale(0.7).to_edge(LEFT)
+        self.play(Write(group2))
 
         #self.write_linear_map_rule()
         #self.show_basis_vector_coords()
@@ -771,23 +798,479 @@ class TrackBasisVectorsExample(LinearTransformationScene):
         if clean_up:
             self.play(FadeOut(i_hat_copy), FadeOut(j_hat_copy))
     
-"""     def write_linear_map_rule(self):
-        rule = Tex(
-            '''$\text{Transformed } \vec{\\textbf{v}}
-            = %s"%self.v_coord_strings[0],
-            (\\text{Transformed }\\hat{\\imath}),
-            "+%s"%self.v_coord_strings[1],
-            "(\\text{Transformed } \\hat{\\jmath})''',
-        )
-        v, equals_neg_1, i_hat, plus_2, j_hat = rule.split()
-        v.set_color(YELLOW)
-        i_hat.set_color(X_COLOR)
-        j_hat.set_color(Y_COLOR)
-        rule.scale(0.85)
-        rule.next_to(self.v_def, DOWN, buff = 0.2)
-        rule.to_edge(LEFT)
-        rule.add_background_rectangle()
+class YouGiveMeVector(Scene):
+    def construct(self):
+        exto = Tex(r'''$\vec{e}_x\to$''')
+        eyto = Tex(r'''$\vec{e}_y\to$''')
 
-        self.play(Write(rule, run_time = 2))
+        ex = Matrix([[1], [-2]])
+        ey = Matrix([[3], [0]])
+
+        exx = VGroup(exto,ex).arrange().set_color(GREEN)
+        eyy = VGroup(eyto,ey).arrange().set_color(RED)
+
+        exx.to_edge(UP).shift(2*LEFT)
+        eyy.to_edge(UP).shift(2*RIGHT)
+
+        self.add(exx, eyy)
+
         self.wait()
-        self.linear_map_rule = rule """
+        self.next_section()
+
+        x = Matrix([["x"],["y"]]).set_row_colors(YELLOW,YELLOW)
+        m1 = ex.copy()
+        m2 = ey.copy()
+        to = Tex(r"$\to x$")
+        plus = Tex(r"$+y$")
+        equals = Tex("=")
+        m3 = Matrix([["1x+3y"],["-2x+0y"]])
+        group = VGroup(x,to,m1,plus,m2,equals,m3).arrange()
+
+        self.play(FadeIn(x),FadeIn(to),FadeIn(plus),FadeIn(m1),FadeIn(m2))
+
+        self.wait()
+        self.next_section()
+        
+        self.play(FadeIn(equals), FadeIn(m3))
+
+class CompletelyDescribed(LinearTransformationScene):
+    def construct(self):
+        self.setup()
+        self.apply_transposed_matrix([[3,-2],[2,1]])
+
+        ex, ey = self.get_basis_vectors()
+
+        exvec = Matrix([[3],[-2]]).set_color(GREEN).next_to(ex.get_end(), RIGHT).shift(2.2*RIGHT+2.5*DOWN)
+        eyvec = Matrix([[2],[1]]).set_color(RED).next_to(ey.get_end(), RIGHT).shift(2.2*RIGHT+0.3*UP)
+
+        self.play(Write(exvec), Write(eyvec))
+        
+        self.wait()
+        self.next_section()
+
+        matrix = Matrix([[3,2], [-2,1]]).set_column_colors(GREEN,RED).to_edge(UP)
+        print(self.mobjects)
+        self.play(FadeOut(self.background_plane), FadeOut(self.plane), FadeOut(ex), FadeOut(ey),FadeOut(self.mobjects[2]))
+        self.play(Transform(exvec, VGroup(matrix.submobjects[0][0],matrix.submobjects[0][2])),
+                  Transform(eyvec, VGroup(matrix.submobjects[0][1],matrix.submobjects[0][3])),
+                  Write(matrix),
+                  
+                  )
+        
+        text = Tex('''"2x2 Matrix"''').to_corner(LEFT+UP)
+
+        self.next_section()
+        self.play(Write(text))
+
+        twovectors = VGroup(*[
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-1.4,0,0],[-0.75,1.5,0]),
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([1.4,0,0],[0.85,1.5,0]),
+            ]).set_color(YELLOW)
+        
+        rec1 = Ellipse(color=GREEN, height=1.5,width=0.8).move_to(matrix.get_center()).shift(0.5*LEFT)
+        rec2 = Ellipse(color=RED, height=1.5,width=0.8).move_to(matrix.get_center()).shift(0.85*RIGHT)
+        
+        woex = Tex(r"Wo $\vec{e}_x$ landet").next_to(twovectors[0],DOWN).shift(LEFT).set_color(GREEN)
+        woey = Tex(r"Wo $\vec{e}_y$ landet").next_to(twovectors[1],DOWN).shift(RIGHT).set_color(RED)
+
+        self.play(Create(rec1))
+        self.play(Create(twovectors[0]), Write(woex))
+
+        self.next_section()
+        self.play(Create(rec2))
+        self.play(Create(twovectors[1]), Write(woey))
+
+        input = Matrix([[5],[7]]).next_to(matrix).shift(1*RIGHT)
+        brace = Brace(input)
+        bracetext = Tex("Inputvektor").next_to(brace, DOWN)
+
+        self.play(FadeOut(rec1), FadeOut(rec2), FadeOut(twovectors), FadeOut(woex), FadeOut(woey))
+        self.play(Create(VGroup(input,brace)), Write(bracetext))
+
+        group = VGroup(
+            Tex("5"),
+            Matrix([[3],[-2]]).set_column_colors(GREEN),
+            Tex("+7"),
+            Matrix([[2],[1]]).set_column_colors(RED),
+        ).arrange()
+        self.play(Transform(VGroup(matrix,input).copy(),group))
+
+        self.wait()
+        self.next_section()
+        self.clear()
+        self.add(text)
+        self.wait()
+        
+
+        matrix2 = Matrix([["a","b"], ["c","d"]]).set_column_colors(GREEN,RED).to_edge(UP)
+        self.play(
+                  Write(matrix2),
+                  )
+
+        input = Matrix([["x"],["y"]]).next_to(matrix2).shift(1*RIGHT)
+        brace = Brace(input)
+        bracetext = Tex("Inputvektor").next_to(brace, DOWN)
+
+        self.play(Create(VGroup(input,brace)), Write(bracetext))
+
+        group = VGroup(
+            Tex("x"),
+            Matrix([["a"],["c"]]).set_column_colors(GREEN),
+            Tex("+y"),
+            Matrix([["b"],["d"]]).set_column_colors(RED),
+            Tex("="),
+            Matrix([["ax+by"],["cx+dy"]]),
+        ).arrange().shift(DOWN).shift(2*RIGHT)
+        self.play(Transform(VGroup(matrix2,input).copy(),group[0:4]))
+
+        self.next_section()
+        self.play(Write(group[-2]),Write(group[-1]))
+
+        self.next_section()
+
+        self.play(matrix2.animate.shift(4.9*LEFT+3.68*DOWN),FadeOut(brace),FadeOut(bracetext))
+        self.play(input.animate.next_to(matrix2,RIGHT))
+        self.play(Create(Tex(":=").next_to(input,RIGHT)))
+
+        newbrace = Brace(group[0:4])
+        btext = Tex("Intuition?!!!!11?!!!").next_to(newbrace, DOWN)
+
+        self.next_section()
+
+        self.play(Create(newbrace), Write(btext))
+
+class isntitmorefun(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        matrixx = [[3,1],[1,2]]
+        matrix = Matrix(matrixx).set_column_colors(GREEN,RED).to_corner(UP+LEFT).add_background_rectangle()
+        v = Matrix([[-1],[2]]).set_column_colors(YELLOW).next_to(matrix,RIGHT).add_background_rectangle()
+
+        self.add(matrix,v)
+        self.wait(0.5)
+        self.moving_mobjects = []
+        self.apply_transposed_matrix(matrixx, run_time=1.5)
+        
+        ex, ey = self.get_basis_vectors()
+        group = VGroup(
+            Matrix([[3],[1]]).set_color(GREEN).next_to(ex).add_background_rectangle().shift(2*RIGHT+UP),
+            Matrix([[1],[2]]).set_color(RED).next_to(ey).add_background_rectangle().shift(-1*LEFT+2*UP)
+        )
+        self.play(Transform(matrix.copy(),group))
+        self.wait()
+
+        new1 = Vector([-3,-1,0], color=GREEN)
+        new2 = Vector([2,4,0], color=RED).shift(new1.get_end())
+
+        self.play(Create(new1), Tex("-1", color=YELLOW).move_to(v.get_center()+0.5*UP).animate.next_to(new1,DOWN).shift(0.5*UP))
+        self.play(Create(new2), Tex("2", color=YELLOW).move_to(v.get_center()+0.5*DOWN).animate.next_to(new2,LEFT).shift(0.75*RIGHT))
+
+        self.play(Create(Vector([-1,3,0], color=YELLOW)))
+
+class letspractise(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        emptymatrix = Matrix([["0","0"],["0","0"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        emptymatrix.add_background_rectangle()
+        emptymatrix[1][0] = Tex("")
+        emptymatrix[1][1] = Tex("")
+        emptymatrix[1][2] = Tex("")
+        emptymatrix[1][3] = Tex("")
+
+        self.add_foreground_mobject(emptymatrix)
+
+        self.apply_transposed_matrix([[0,1],[-1,0]])
+
+        text = Tex(r"90$\circ$ Drehung gegen den Uhrzeigersinn").shift(DOWN).add_background_rectangle()
+        self.play(Write(text))
+
+        ex, ey = self.get_basis_vectors()
+
+        m1 = Matrix([[0],[1]]).set_color(GREEN).shift(UP+LEFT).set_z_index(30)
+        m2 = Matrix([[-1],[0]]).set_color(RED).shift(2*LEFT+0.2*UP).set_z_index(31)
+
+        self.next_section()
+        self.play(Write(m1))
+        self.next_section()
+        self.play(m1[0][0].animate.shift([-5,1.8,0]), m1[0][1].animate.shift([-5,1.65,0]), FadeOut(m1[1]), FadeOut(m1[2]))
+        self.next_section()
+        self.play(Write(m2))
+        self.next_section()
+        self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([1.9,0.8,0]), m2[0][1].animate.shift([-5,1.65,0]).shift([1.9,0.8,0]), FadeOut(m2[1]), FadeOut(m2[2]))
+
+        self.next_section()
+        self.moving_mobjects = []
+        self.apply_inverse_transpose([[0,1],[-1,0]], run_time=1)
+        vnew = self.add_vector([1,2,0], color=YELLOW, max_tip_length_to_length_ratio=0.15)
+        self.moving_mobjects = []
+        self.apply_transposed_matrix([[0,1],[-1,0]])
+
+        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT)
+        self.play(Write(xvector))
+
+class funTrafo(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        emptymatrix = Matrix([["0","0"],["0","0"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        emptymatrix.add_background_rectangle()
+        emptymatrix[1][0] = Tex("")
+        emptymatrix[1][1] = Tex("")
+        emptymatrix[1][2] = Tex("")
+        emptymatrix[1][3] = Tex("")
+
+        self.add_foreground_mobject(emptymatrix)
+
+        self.apply_transposed_matrix([[1,0],[1,1]])
+
+        text = Tex(r'''"Scheerung"''').shift(DOWN).add_background_rectangle()
+        self.play(Write(text))
+
+        m1 = Matrix([[1],[0]]).set_color(GREEN).shift(2*RIGHT +0.2*UP).set_z_index(30)
+        m2 = Matrix([[1],[1]]).set_color(RED).shift(RIGHT+UP).set_z_index(31)
+
+        self.next_section()
+        self.play(Write(m1))
+        self.next_section()
+        self.play(m1[0][0].animate.shift([-5,1.8,0]).shift([-3,0.75,0]), m1[0][1].animate.shift([-5,1.65,0]).shift([-3,0.75,0]), FadeOut(m1[1]), FadeOut(m1[2]))
+        self.next_section()
+        self.play(Write(m2))
+        self.next_section()
+        self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([-1,-0.05,0]), m2[0][1].animate.shift([-5,1.65,0]).shift([-1,-0.05,0]), FadeOut(m2[1]), FadeOut(m2[2]))
+
+        self.wait()
+
+        self.next_section()
+        self.moving_mobjects = []
+        self.apply_inverse_transpose([[1,0],[1,1]], run_time=1)
+        vnew = self.add_vector([1,2,0], color=YELLOW, max_tip_length_to_length_ratio=0.15)
+        self.moving_mobjects = []
+        self.apply_transposed_matrix([[1,0],[1,1]])
+
+        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT)
+        self.play(Write(xvector))
+
+class UndAndersherum(Scene):
+    def construct(self):
+        text = Tex("Und andersherum?")
+        self.play(Write(text))
+
+class UndAndersherum2(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        matrix = Matrix([["1","3"],["2","1"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        matrix.add_background_rectangle()
+        self.add(matrix)
+
+        self.wait()
+        self.next_section()
+        self.moving_mobjects = []
+        m1 = Matrix([[1],[2]]).set_color(GREEN).shift(1.7*RIGHT +2.3*UP).set_z_index(30)
+        self.apply_transposed_matrix([[1,2],[0,1]])
+        self.play(Transform(matrix.copy(),m1))
+
+        self.next_section()
+        self.moving_mobjects = []
+        m2 = Matrix([[3],[1]]).set_color(RED).shift(3.8*RIGHT +1*UP).set_z_index(30)
+        self.apply_transposed_matrix([[-5,0],[3,1]])
+        self.play(Transform(matrix.copy(),m2))
+
+class Mitmachspiel(Scene):
+    def construct(self):
+        text = Tex("Mitmachspiel!!!!!!").set_color_by_gradient(RED,YELLOW,PINK)
+        self.play(Write(text))
+
+class Untervektorraum(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        matrix = Matrix([["2","-2"],["1","-1"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        matrix.add_background_rectangle()
+        text = Tex("Linear abhängige", color=YELLOW).next_to(matrix,DOWN).shift(0.7*RIGHT)
+        text2 = Tex("Spaltenvektoren", color=YELLOW).next_to(text,DOWN).shift(0*RIGHT)
+        self.add(matrix,text,text2)
+
+        self.wait()
+        self.next_section()
+        self.moving_mobjects = []
+        m1 = Matrix([[2],[1]]).set_color(GREEN).shift(1.7*RIGHT-0.6*UP).set_z_index(30)
+        self.apply_transposed_matrix([[2,1],[0,1]])
+        self.play(Transform(matrix.copy(),m1))
+
+        self.next_section()
+        self.moving_mobjects = []
+        m2 = Matrix([[-2],[-1]]).set_color(RED).shift(-2.8*RIGHT).set_z_index(30)
+        self.apply_transposed_matrix([[2,1],[-2,-1]])
+        self.play(Transform(matrix.copy(),m2))
+
+class sumUp(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=True,
+            include_background_plane=True,
+            show_basis_vectors=False,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+
+    def construct(self):
+        self.next_section()
+        self.wait()
+        self.moving_mobjects = []
+        self.next_section()
+        matrix = [[3, 1], [0, 2]]
+        self.apply_matrix(matrix)
+        self.wait(2)
+        text = Tex(r'''Gitterlinien bleiben parallel und gleich gespaced''')
+        text[0][19:27].set_color(YELLOW)
+        text[0][36:48].set_color(GREEN)
+        text.add_background_rectangle()
+        text.shift(-text.get_bottom())
+        self.play(Write(text))
+        self.wait()
+
+class sumUp2(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=True,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+
+    def construct(self):
+        self.apply_transposed_matrix([[3,-2],[2,1]])
+        m1 = Matrix([[3],[-2]]).set_color(GREEN).shift(4*RIGHT-2*UP).set_z_index(30)
+        m2 = Matrix([[2],[1]]).set_color(RED).shift(2.7*RIGHT+1*UP).set_z_index(31)
+        self.play(Write(m1))
+        self.play(Write(m2))
+
+        matrix = Matrix([[3,2], [-2,1]]).set_column_colors(GREEN,RED).to_edge(UP)
+        print(self.mobjects)
+        self.play(FadeOut(self.background_plane), FadeOut(self.plane), FadeOut(self.i_hat), FadeOut(self.j_hat),FadeOut(self.mobjects[2]))
+        self.play(Transform(m1, VGroup(matrix.submobjects[0][0],matrix.submobjects[0][2])),
+                  Transform(m2, VGroup(matrix.submobjects[0][1],matrix.submobjects[0][3])),
+                  Write(matrix),
+                  
+                  )
+        
+        text = Tex('''"2x2 Matrix"''').to_corner(LEFT+UP)
+
+        self.next_section()
+        self.play(Write(text))
+
+        twovectors = VGroup(*[
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-1.4,0,0],[-0.75,1.5,0]),
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([1.4,0,0],[0.85,1.5,0]),
+            ]).set_color(YELLOW)
+        
+        rec1 = Ellipse(color=GREEN, height=1.5,width=0.8).move_to(matrix.get_center()).shift(0.5*LEFT)
+        rec2 = Ellipse(color=RED, height=1.5,width=0.8).move_to(matrix.get_center()).shift(0.85*RIGHT)
+        
+        woex = Tex(r"Wo $\vec{e}_x$ landet").next_to(twovectors[0],DOWN).shift(LEFT).set_color(GREEN)
+        woey = Tex(r"Wo $\vec{e}_y$ landet").next_to(twovectors[1],DOWN).shift(RIGHT).set_color(RED)
+
+        self.play(Create(rec1))
+        self.play(Create(twovectors[0]), Write(woex))
+
+        self.next_section()
+        self.play(Create(rec2))
+        self.play(Create(twovectors[1]), Write(woey))
+
+        self.next_section()
+
+        self.play(FadeOut(rec1), FadeOut(rec2), FadeOut(twovectors), FadeOut(woex), FadeOut(woey))
+
+        group = VGroup(
+            Matrix([["a","b"], ["c","d"]]).set_column_colors(GREEN,RED),
+            Tex(":="),
+            Tex("x"),
+            Matrix([["a"],["c"]]).set_column_colors(GREEN),
+            Tex("+y"),
+            Matrix([["b"],["d"]]).set_column_colors(RED),
+            Tex("="),
+            Matrix([["ax+by"],["cx+dy"]]),
+        ).arrange().shift(DOWN)
+    
+        self.play(FadeIn(group))
+
+class YouCanInterpretMatrices(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        matrix = Matrix([["1","3"],["2","1"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        matrix.add_background_rectangle()
+        self.add(matrix)
+
+        self.wait()
+        self.next_section()
+        self.moving_mobjects = []
+        m1 = Matrix([[1],[2]]).set_color(GREEN).shift(1.7*RIGHT +2.3*UP).set_z_index(30)
+        self.apply_transposed_matrix([[1,2],[0,1]])
+        self.play(Transform(matrix.copy(),m1))
+
+        self.next_section()
+        self.moving_mobjects = []
+        m2 = Matrix([[3],[1]]).set_color(RED).shift(3.8*RIGHT +1*UP).set_z_index(30)
+        self.apply_transposed_matrix([[-5,0],[3,1]])
+        self.play(Transform(matrix.copy(),m2))

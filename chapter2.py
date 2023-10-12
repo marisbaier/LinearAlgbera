@@ -238,7 +238,7 @@ class CoordinatesAsScalarsExample(VectorScene):
         equa = VGroup(*[self.A,self.x,eq,self.v])
         equa.arrange(buff=0.2)
 
-        equa.move_to(label)
+        equa.move_to(label).shift(UP+2.3*RIGHT)
 
         equa.shift_onto_screen()
         #i_hat, plus, j_hat = new_mob.split()
@@ -246,7 +246,7 @@ class CoordinatesAsScalarsExample(VectorScene):
         self.v.set_color(RED)
 
         print(self.mobjects)
-        self.play(Transform(label, equa))
+        self.play(Create(equa))
 # TODO: Transform(label, equa) is not working as it should
 
 class WhatIfWeChoseADifferentBasis(Scene):
@@ -256,7 +256,7 @@ class WhatIfWeChoseADifferentBasis(Scene):
             run_time = 2
         ))
         self.wait(2)
-
+#
 class ShowVaryingLinearCombinations(VectorScene):
 
     def construct(self):
@@ -360,7 +360,7 @@ class ShowVaryingLinearCombinations(VectorScene):
         self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
-
+#
 class NameLinearCombinations(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
@@ -657,7 +657,7 @@ class UnluckyCase(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
-
+#
 class EvenMoreUnluckyCase(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
@@ -684,7 +684,7 @@ class EvenMoreUnluckyCase(VectorScene):
         self.play(Transform(v1,dot), Transform(v2, dot))
         self.wait()
 
-class NameLinearCombinations(VectorScene):
+class NameLinearCombinations2(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
         self.vector2 = [3, -1]
@@ -952,7 +952,7 @@ class NameLinearCombinations(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
-
+#
 class JustSome3DVectors(ThreeDScene):
     def construct(self):
         axes = ThreeDAxes()
@@ -981,7 +981,7 @@ class JustSome3DVectors(ThreeDScene):
 class WasIstDerSpann(Scene):
     def construct(self):
         self.play(Write(Tex(r"Was ist der Spann im $\mathbb{R}^3$?")))
-
+#
 class ThreeDSpan(ThreeDScene):
     def construct(self):
 
@@ -1066,7 +1066,7 @@ class WhatAboutThreeVectors(ThreeDScene):
         self.play(group.animate.shift(2*c))
         self.play(group.animate.shift(-0.4*c))
         self.wait(8)
-
+#
 class LinearDependence(ThreeDScene):
     def construct(self):
         axes = ThreeDAxes()
