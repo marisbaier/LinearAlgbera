@@ -5,32 +5,6 @@ config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
 
-class ListTerms(Scene):
-    def construct(self):
-        title = Tex("Under the light of linear transformations")
-        title.set_color(YELLOW)
-        title.to_edge(UP)
-        #randy = Randolph().to_corner()
-        words = VGroup(*list(map(Tex, [
-            "Inverse matrices", 
-            "Column space", 
-            "Rank",
-            "Null space",
-        ])))
-        self.next_section()
-        words.arrange(DOWN, aligned_edge = LEFT)
-        words.next_to(title, DOWN, aligned_edge = LEFT)
-        words.shift(RIGHT)
-
-        self.add(title)
-        #self.add(title, randy)
-        for i, word in enumerate(words.split()):
-            self.play(Write(word), run_time = 1)
-            """ if i%2 == 0:
-                self.play(Blink(randy))
-            else:
-                self.wait() """
-        self.wait()
 
 class UsefulnessOfMatrices(Scene):
     def construct(self):
@@ -70,7 +44,7 @@ class UsefulnessOfMatrices(Scene):
             self.wait()
         self.remove()
         self.next_section()
-
+59
 class ComplicatedSystem(Scene):
     def construct(self):
         system = MathTex(r"""
@@ -86,7 +60,7 @@ class ComplicatedSystem(Scene):
         #self.play(randy.change_mode, "sassy")
         #self.play(Blink(randy))
         self.wait()
-
+60
 class SystemOfEquations(Scene):
     def construct(self):
         equations = self.get_equations()
@@ -385,7 +359,7 @@ class SystemOfEquations(Scene):
             compact_equation.target
         ))
         self.next_section()
-
+61
 
 class LinearSystemTransformationSceneOne(LinearTransformationScene):
     def __init__(self):
@@ -452,7 +426,7 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
         self.show_basis_vectors = False
         self.apply_transposed_matrix(matrix, show_basis_vectors=False)
         self.wait() """
-
+62
 class LinearSystemTransformationSceneTwo(LinearTransformationScene):
     def __init__(self):
         LinearTransformationScene.__init__(
@@ -511,7 +485,7 @@ class LinearSystemTransformationSceneTwo(LinearTransformationScene):
         self.moving_mobjects = []
         self.apply_transposed_matrix(matrix)
         self.next_section()
-
+63
 class SystemOfTwoEquationsTwoUnknowns(Scene):
     def construct(self):
         system = Tex(r"""\begin{align*}
@@ -557,17 +531,76 @@ class SystemOfTwoEquationsTwoUnknowns(Scene):
             self.play(Write(mob.brace))
             self.next_section()
         self.next_section()
+64
+class Inverse1(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
 
-class test(Scene):
     def construct(self):
-        Helloworld = Text("Hallo").scale(0.4)
-        triangle = Triangle(color=WHITE)
+            self.apply_transposed_matrix([[3,0],[1,2]], run_time=0.01)
 
-        self.play(Create(triangle), Write(Helloworld))
+            matrix1 = Matrix([[3,1],[0,2]]).set_color(MAROON_C).add_background_rectangle()
+            matrix1.to_corner(UP+RIGHT)
+            matrix1brace = Brace(matrix1, DOWN).set_color(MAROON_C).add_background_rectangle()
+            matrix1bracetext = matrix1brace.get_text("A").set_color(MAROON_C).add_background_rectangle()
+            text1=Tex("Abbildung:").add_background_rectangle().next_to(matrix1, LEFT)
+            first = VGroup(text1, matrix1, matrix1brace, matrix1bracetext)
 
-        self.wait()
+            self.add_foreground_mobject(first)
+            self.next_section()
 
-        self.play(triangle.animate.shift([1,0,0]),Helloworld.animate.shift([1,0,0]))
+            matrix2 = Matrix([["1/3","-1/6"],["0","1/2"]]).set_color(YELLOW).add_background_rectangle()
+            matrix2.to_corner(UP+RIGHT)
+            matrix2brace = Brace(matrix2, DOWN).set_color(YELLOW).add_background_rectangle()
+            matrix2bracetext = matrix2brace.get_text(r"$A^{-1}$").set_color(YELLOW).add_background_rectangle()
+            text2 = Tex("Inverse Abbildung:").add_background_rectangle().next_to(matrix2, LEFT)
+            second = VGroup(text2, matrix2,matrix2brace,matrix2bracetext)
 
-        
+            self.play(Transform(first, second), Transform(text1,text2))
+            self.apply_inverse_transpose([[3,0],[1,2]])
+65
+class Inverse2(LinearTransformationScene):
+    def __init__(self):
+        LinearTransformationScene.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
 
+    def construct(self):
+
+            matrix1 = Matrix([[0,1],[-1,0]]).set_color(MAROON_C).add_background_rectangle()
+            matrix1.to_corner(UP+RIGHT)
+            matrix1brace = Brace(matrix1, DOWN).set_color(MAROON_C).add_background_rectangle().set_z_index(50)
+            matrix1bracetext = matrix1brace.get_text("A").set_color(MAROON_C).add_background_rectangle()
+            text1=Tex("Abbildung:").add_background_rectangle().next_to(matrix1, LEFT)
+            first = VGroup(text1, matrix1, matrix1brace, matrix1bracetext)
+
+            self.add_foreground_mobject(first)
+
+            self.apply_transposed_matrix([[0,1],[-1,0]])
+            self.next_section()
+
+            matrix2 = Matrix([["0","1"],["-1","0"]]).set_color(YELLOW).add_background_rectangle()
+            matrix2.to_corner(UP+RIGHT)
+            matrix2brace = Brace(matrix2, DOWN).set_color(YELLOW).add_background_rectangle()
+            matrix2bracetext = matrix2brace.get_text(r"$A^{-1}$").set_color(YELLOW).add_background_rectangle()
+            text2 = Tex("Inverse Abbildung:").add_background_rectangle().next_to(matrix2, LEFT)
+            second = VGroup(text2, matrix2,matrix2brace,matrix2bracetext)
+
+            self.play(Transform(first, second), Transform(text1,text2))
+            self.moving_mobjects = []
+            self.apply_inverse_transpose([[0,1],[-1,0]])
+66

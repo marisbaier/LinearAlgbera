@@ -164,7 +164,7 @@ class CoordinatesAsScalars(VectorScene):
 
         self.play(Transform(new_array, equa))
         self.next_section()
-
+1
 class CoordinatesAsScalarsExample(VectorScene):
     def construct(self):
         numberplane = NumberPlane(faded_line_ratio=2, background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
@@ -248,7 +248,7 @@ class CoordinatesAsScalarsExample(VectorScene):
         print(self.mobjects)
         self.play(Create(equa))
 # TODO: Transform(label, equa) is not working as it should
-
+2
 class WhatIfWeChoseADifferentBasis(Scene):
     def construct(self):
         self.play(Write(
@@ -256,7 +256,7 @@ class WhatIfWeChoseADifferentBasis(Scene):
             run_time = 2
         ))
         self.wait(2)
-#
+3
 class ShowVaryingLinearCombinations(VectorScene):
 
     def construct(self):
@@ -360,7 +360,7 @@ class ShowVaryingLinearCombinations(VectorScene):
         self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
-#
+4
 class NameLinearCombinations(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
@@ -477,7 +477,7 @@ class NameLinearCombinations(VectorScene):
         self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
-
+5
 class LinearCombinationsWithSumCopies(VectorScene):
 
     def construct(self):
@@ -592,7 +592,7 @@ class LinearCombinationsWithSumCopies(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
-
+6
 class UnluckyCase(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
@@ -657,7 +657,7 @@ class UnluckyCase(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
-#
+7
 class EvenMoreUnluckyCase(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
@@ -683,7 +683,7 @@ class EvenMoreUnluckyCase(VectorScene):
         dot = Dot()
         self.play(Transform(v1,dot), Transform(v2, dot))
         self.wait()
-
+8
 class NameLinearCombinations2(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
@@ -952,7 +952,7 @@ class NameLinearCombinations2(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
-#
+#9
 class JustSome3DVectors(ThreeDScene):
     def construct(self):
         axes = ThreeDAxes()
@@ -977,11 +977,11 @@ class JustSome3DVectors(ThreeDScene):
         #self.wait(8)
         self.play(Write(Tex(r"")))
         self.wait(8)
-
+10
 class WasIstDerSpann(Scene):
     def construct(self):
         self.play(Write(Tex(r"Was ist der Spann im $\mathbb{R}^3$?")))
-#
+#11
 class ThreeDSpan(ThreeDScene):
     def construct(self):
 
@@ -1019,7 +1019,7 @@ class ThreeDSpan(ThreeDScene):
         v2.add_updater(lambda me: me.put_start_and_end_on(v1.get_end(),v1.get_end()-startingv2-np.array([0,0.05,0])))
         self.play(v1.animate.put_start_and_end_on(ORIGIN,-b*0.5))
         self.wait(8)
-
+12
 class WhatAboutThreeVectors(ThreeDScene):
     def construct(self):
         axes = ThreeDAxes()
@@ -1066,7 +1066,7 @@ class WhatAboutThreeVectors(ThreeDScene):
         self.play(group.animate.shift(2*c))
         self.play(group.animate.shift(-0.4*c))
         self.wait(8)
-#
+#13
 class LinearDependence(ThreeDScene):
     def construct(self):
         axes = ThreeDAxes()
@@ -1098,7 +1098,7 @@ class LinearDependence(ThreeDScene):
         self.wait(2)
         self.add_fixed_in_frame_mobjects(text)
         self.wait(8)
-
+14
 class LinearDependence2(VectorScene):
     def construct(self):
         self.vector1 = [1, 2]
@@ -1166,3 +1166,4 @@ class LinearDependence2(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
+15

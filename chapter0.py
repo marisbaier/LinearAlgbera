@@ -120,3 +120,4 @@ class Intro(Scene):
         self.wait()
 
         self.play(FadeOut(axis), FadeOut(linear_func))
+0

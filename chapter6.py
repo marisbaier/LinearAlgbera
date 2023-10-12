@@ -22,7 +22,7 @@ class stretchspace(LinearTransformationScene):
             self.add(text)
             self.next_section()
             self.apply_transposed_matrix([[3,1],[-1,2]])
-
+55
 class compressspace(LinearTransformationScene):
     def __init__(self):
         LinearTransformationScene.__init__(
@@ -40,7 +40,7 @@ class compressspace(LinearTransformationScene):
             self.add(text)
             self.next_section()
             self.apply_transposed_matrix([[0.5,-0.5],[1,0.25]])
-
+56
 class Blob(Circle):
     CONFIG = {
         "stroke_color" : TEAL,
@@ -86,7 +86,7 @@ class exactlyhowmuch(LinearTransformationScene):
             self.add(text)
             self.next_section()
             self.apply_transposed_matrix([[2,1],[-1,3]])
-
+57
 class exactlyhowmuch2(LinearTransformationScene):
     def __init__(self):
         LinearTransformationScene.__init__(
@@ -110,3 +110,4 @@ class exactlyhowmuch2(LinearTransformationScene):
             self.next_section()
             #text3.set_color(WHITE)
             self.apply_transposed_matrix([[2,-1],[1,1]])
+58

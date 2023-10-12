@@ -19,7 +19,7 @@ class TwoSuccessiveTransformations(LinearTransformationScene):
         self.moving_mobjects = []
         self.apply_transposed_matrix([[-1, -0.5],[0, -0.5]], run_time=1.5)
         self.wait()
-
+48
 class RotationThenShear(LinearTransformationScene):
     def construct(self):
         self.setup()
@@ -35,7 +35,7 @@ class RotationThenShear(LinearTransformationScene):
         self.apply_transposed_matrix([[1, 0], [1, 1]])
         text.clear_updaters()
         self.wait()
-
+49
 class RotationThenShear2(LinearTransformationScene):
     def construct(self):
         self.setup()    
@@ -77,7 +77,7 @@ class RotationThenShear2(LinearTransformationScene):
         """ self.next_section()
         self.remove(self.plane, text,text2,ex,ey)
         self.play(matrix.animate.move_to(UP)) """
-
+50
 class RotationThenShear3(LinearTransformationScene):
     def construct(self):
         matrix = Matrix([[1,-1],[1,0]])
@@ -90,7 +90,7 @@ class RotationThenShear3(LinearTransformationScene):
         self.moving_mobjects = []
         self.apply_transposed_matrix([[1, 0], [1, 1]], run_time=1.5)
         self.wait()
-
+51
 class OneWayToThinkAboutIt(LinearTransformationScene):
     def construct(self):
         self.setup()
@@ -100,7 +100,7 @@ class OneWayToThinkAboutIt(LinearTransformationScene):
         self.moving_mobjects = []
         self.apply_transposed_matrix([[1, 0], [1, 1]], run_time=1.5)
         self.wait()
-
+52
 class OneWayToThinkAboutIt2(Scene):
     def construct(self):
         v = Matrix([["x"],["y"]])
@@ -149,7 +149,7 @@ class OneWayToThinkAboutIt2(Scene):
         self.next_section()
         text2 = Tex("f(g(x))").scale(0.7).next_to(text,UP)
         self.play(Write(text2))
-
+53
 class Composition(LinearTransformationScene):
     def __init__(self):
         LinearTransformationScene.__init__(
@@ -239,7 +239,7 @@ class Composition(LinearTransformationScene):
         vec = Vector(1.3*UP).shift(0.05*RIGHT+0.5*DOWN).set_color(YELLOW).set_z_index(51)
         ell2 = Ellipse(color=GREEN, height=1.5,width=0.8).move_to(matrix3.get_center()).shift(0.7*LEFT).set_z_index(50)
         self.play(Create(vec), Create(ell2), FadeOut(ell))
-
+54
 
 
 
