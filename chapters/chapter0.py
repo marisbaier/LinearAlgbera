@@ -1,12 +1,14 @@
 from manim import *
-from manim_editor import PresentationSectionType
+""" from manim_editor import PresentationSectionType """
+from manim_slides import *
 from manim.opengl import *
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
 
-class Intro(Scene):
+class Intro(Slide):
     def construct(self):
+
         V1 = ImageMobject("src/images/BSc_2022_Studienplan.jpg")
         V2 = ImageMobject("src/images/Studienverlaufsplan.png")
         V3 = ImageMobject("src/images/StudienverlaufsplanLMU.png")
@@ -24,7 +26,7 @@ class Intro(Scene):
         self.add(V1, V2, V3, zoom)
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
         e1 = Ellipse(2,2.2, stroke_width=20).shift([0.5,-0.2,0])
         e2 = Ellipse(1.5,0.5, stroke_width=20).move_to([-5.5,1.15,0])
@@ -36,7 +38,7 @@ class Intro(Scene):
         self.add(ellipses)
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
         self.play(FadeOut(V1,V2,V3,zoom,ellipses))
         self.wait(0.2)
@@ -45,13 +47,13 @@ class Intro(Scene):
         self.play(Write(Title))
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
-        Subtitle = Tex("...und wozu braucht man Vektorräume?", font_size=25, color=GREY, opacity=0.7).shift(0.7*DOWN)
+        Subtitle = Tex("...und wozu braucht man Vektorräume?", font_size=25, color=GREY).shift(0.7*DOWN) # , opacity=0.7
         self.play(Write(Subtitle, run_time=1.5))
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
         linear = Text("linear?")
         self.remove(Title,Subtitle)
@@ -59,7 +61,7 @@ class Intro(Scene):
         self.play(Write(linear))
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
         text = VGroup()
         text.add(
@@ -80,7 +82,7 @@ class Intro(Scene):
         self.play(FadeIn(text))
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
         self.play(FadeOut(text), linear.animate.move_to([0,3,0]))
 
@@ -100,7 +102,7 @@ class Intro(Scene):
         self.play(Write(linear_func))
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
         affine_func = axis.plot(
             lambda t: 0.7*t+1,
@@ -109,7 +111,7 @@ class Intro(Scene):
         self.play(ReplacementTransform(linear_func,affine_func))
 
         self.wait()
-        self.next_section()
+        self.next_slide()
 
         linear_func = axis.plot(
             lambda t: 0.7*t,

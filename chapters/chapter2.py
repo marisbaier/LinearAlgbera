@@ -1,16 +1,20 @@
 from manim import *
-from manim_editor import PresentationSectionType
+# from manim_editor import PresentationSectionType
+from manim_slides import *
 from manim.opengl import *
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
 
-class CoordinatesAsScalars(VectorScene):
+class VectorSlide(Slide, VectorScene):
+    pass
+
+class CoordinatesAsScalars(VectorSlide):
     def construct(self):
         numberplane = NumberPlane(faded_line_ratio=2, background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
         self.add(numberplane)
 
-        self.next_section()  
+        # self.next_section()  
 
         v = Vector([1,2], color=YELLOW, stroke_width=2)
         self.play(Create(v))
@@ -66,7 +70,7 @@ class CoordinatesAsScalars(VectorScene):
         self.remove(*starting_mobjects)
         self.add(numberplane)
         #self.remove(v,v2, array,array2)
-        self.next_section()
+        # self.next_section()
         self.play(
             Transform(x, new_x),
             Transform(y, new_y),
@@ -79,7 +83,7 @@ class CoordinatesAsScalars(VectorScene):
             Transform(j_hat, new_j_hat),
             run_time = 3
         )
-        self.next_section()
+        # self.next_section()
         starting_mobjects.remove(array)
         new_x, new_y = np.array(new_array.get_mob_matrix(), dtype=object).flatten()
         v2.set_color(YELLOW)
@@ -118,7 +122,7 @@ class CoordinatesAsScalars(VectorScene):
             animate = False
         ).scale(0.8)
         
-        self.next_section()
+        # self.next_section()
         x, y = np.array(new_array.get_mob_matrix(), dtype=object).flatten()
         for coord, v, label, factor, shift_right in [
             (x, i_hat, i_hat_label, 3, False), 
@@ -143,7 +147,7 @@ class CoordinatesAsScalars(VectorScene):
                 self.play(ApplyMethod(
                     group.shift, 3*RIGHT
                 ))
-        self.next_section()
+        # self.next_section()
 
         equation = VGroup(*[
             Tex("3"),
@@ -163,7 +167,7 @@ class CoordinatesAsScalars(VectorScene):
         self.v.set_color(RED)
 
         self.play(Transform(new_array, equa))
-        self.next_section()
+        # self.next_section()
 1
 class CoordinatesAsScalarsExample(VectorScene):
     def construct(self):
@@ -190,7 +194,7 @@ class CoordinatesAsScalarsExample(VectorScene):
         text.to_corner(UP+RIGHT)
         self.play(Write(text))
 
-        self.next_section()
+        # self.next_section()
 
         vector = Vector([-5,2], color=YELLOW)
         label = Matrix([[-5], [2]]).set_row_colors(GREEN, RED)
@@ -252,7 +256,7 @@ class CoordinatesAsScalarsExample(VectorScene):
 class WhatIfWeChoseADifferentBasis(Scene):
     def construct(self):
         self.play(Write(
-            Tex("What ist, wenn wir andere Basisvektoren wählen?"),
+            Tex("Was ist, wenn wir andere Basisvektoren wählen?"),
             run_time = 2
         ))
         self.wait(2)
@@ -283,9 +287,9 @@ class ShowVaryingLinearCombinations(VectorScene):
         numberplane = NumberPlane(faded_line_ratio=2) #background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
         self.add(numberplane)
         #self.lock_in_faded_grid()
-        self.next_section()
+        # self.next_section()
         v1 = self.add_vector(self.vector1, color = self.vector1_color)
-        self.next_section()
+        # self.next_section()
         v2 = self.add_vector(self.vector2, color = self.vector2_color)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, 
@@ -322,7 +326,7 @@ class ShowVaryingLinearCombinations(VectorScene):
             ApplyMethod(v2.fade, 0.7),
             )
         self.wait()
-        self.next_section()
+        # self.next_section()
 
 
         self.play(v2scaled.animate.shift([1.5,3,0]))
@@ -374,9 +378,9 @@ class NameLinearCombinations(VectorScene):
         numberplane = NumberPlane()
         self.add(numberplane)
 
-        self.next_section()
+        # self.next_section()
         v1 = self.add_vector(self.vector1, color = self.vector1_color)
-        self.next_section()
+        # self.next_section()
         v2 = self.add_vector(self.vector2, color = self.vector2_color)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, 
@@ -386,7 +390,7 @@ class NameLinearCombinations(VectorScene):
             v2, self.vector2_label, color = self.vector2_color, 
             #buff_factor = 3
         )
-        self.next_section()
+        # self.next_section()
 
         rectangle = Rectangle(color=config.background_color, width=5.5, height=2.4, 
                               stroke_width=250).to_edge(UP+LEFT, buff=0)
@@ -439,7 +443,7 @@ class NameLinearCombinations(VectorScene):
             ApplyMethod(v2.fade, 0.7),
             )
         self.wait()
-        self.next_section()
+        # self.next_section()
 
 
         self.play(v2scaled.animate.shift([1.5,3,0]))
@@ -504,9 +508,9 @@ class LinearCombinationsWithSumCopies(VectorScene):
         numberplane = NumberPlane(faded_line_ratio=2) #background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
         self.add(numberplane)
         #self.lock_in_faded_grid()
-        self.next_section()
+        # self.next_section()
         v1 = self.add_vector(self.vector1, color = self.vector1_color, animate=False)
-        self.next_section()
+        # self.next_section()
         v2 = self.add_vector(self.vector2, color = self.vector2_color, animate=False)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, animate=False
@@ -697,9 +701,9 @@ class NameLinearCombinations2(VectorScene):
         numberplane = NumberPlane()
         self.add(numberplane)
 
-        self.next_section()
+        # self.next_section()
         v1 = self.add_vector(self.vector1, color = self.vector1_color)
-        self.next_section()
+        # self.next_section()
         v2 = self.add_vector(self.vector2, color = self.vector2_color)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, 
@@ -762,7 +766,7 @@ class NameLinearCombinations2(VectorScene):
             ApplyMethod(v2.fade, 0.7),
             )
         self.wait()
-        self.next_section()
+        # self.next_section()
 
 
         self.play(v2scaled.animate.shift([1.5,3,0]))
@@ -801,7 +805,7 @@ class NameLinearCombinations2(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
 
-        self.next_section()
+        # self.next_section()
 
         self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label,v1,v2)
         v1=self.add_vector([1,2], color=MAROON_C)
@@ -850,7 +854,7 @@ class NameLinearCombinations2(VectorScene):
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
 
-        self.next_section()
+        # self.next_section()
         self.remove(v2scaled,v1scaled,textv1,textv2,v1_label,v2_label)
         v1=self.add_vector([1,2], color=MAROON_C, animate=False)
         v2=self.add_vector([3,-1], color=BLUE, animate=False)
@@ -862,11 +866,11 @@ class NameLinearCombinations2(VectorScene):
 
         
 
-        self.next_section()
+        # self.next_section()
         self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label)
 
         v1 = self.add_vector(self.vector1, color = self.vector1_color, animate=False)
-        self.next_section()
+        # self.next_section()
         v2 = self.add_vector(self.vector2, color = self.vector2_color, animate=False)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, animate=False

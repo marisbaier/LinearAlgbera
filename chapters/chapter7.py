@@ -13,7 +13,7 @@ class UsefulnessOfMatrices(Scene):
         title.to_edge(UP)
         self.add(title)
         self.wait(3) #Play some 3d linear transform over this
-        self.next_section()
+        # self.next_section()
         equations = MathTex(r"""
             6x - 3y + 2z &= 7 \\
             x + 2y + 5z &= 0 \\
@@ -34,7 +34,7 @@ class UsefulnessOfMatrices(Scene):
         eq_brace = Brace(equations, DOWN)
         eq_words = eq_brace.get_text("Gleichungen")
 
-        self.next_section()
+        # self.next_section()
         self.play(Transform(syms.copy(), new_syms, path_arc = np.pi/2))
         for brace, words in (sym_brace, unknowns), (eq_brace, eq_words):
             self.play(
@@ -43,7 +43,7 @@ class UsefulnessOfMatrices(Scene):
             )
             self.wait()
         self.remove()
-        self.next_section()
+        # self.next_section()
 59
 class ComplicatedSystem(Scene):
     def construct(self):
@@ -64,9 +64,9 @@ class ComplicatedSystem(Scene):
 class SystemOfEquations(Scene):
     def construct(self):
         equations = self.get_equations()
-        self.next_section()
+        # self.next_section()
         self.show_linearity_rules(equations)
-        self.next_section()
+        # self.next_section()
         self.describe_organization(equations)
         self.factor_into_matrix(equations)
 
@@ -119,7 +119,7 @@ class SystemOfEquations(Scene):
         scalars = VGroup(*[m.split()[0] for m in scaled_vars.split()])
         plusses = VGroup(*[top_equation.split()[2],top_equation.split()[5]])
 
-        self.next_section()
+        # self.next_section()
 
         self.play(other_equations.animate.fade())
         self.play(Transform(scaled_vars, isolated_scaled_vars))
@@ -129,7 +129,7 @@ class SystemOfEquations(Scene):
             for m in scalars.split()
         ])
 
-        self.next_section()
+        # self.next_section()
         
         self.remove(scalars)
         self.play(scaled_vars.animate.restore())
@@ -229,9 +229,9 @@ class SystemOfEquations(Scene):
                 FadeIn(mob.square),
                 FadeIn(mob.words)
             )
-            self.next_section()
+            # self.next_section()
             self.play(*list(map(FadeOut, [mob.square, mob.words])))
-        self.next_section()
+        # self.next_section()
         self.play(
             Create(zero_circles),
             Write(zero_circles.words, run_time = 1)
@@ -243,10 +243,10 @@ class SystemOfEquations(Scene):
         title.scale(1.5)
         title.to_edge(UP)
 
-        self.next_section()
+        # self.next_section()
  
         self.play(Write(title))
-        self.next_section()
+        # self.next_section()
         self.play(FadeOut(title))
     
     def factor_into_matrix(self, equations):
@@ -335,15 +335,15 @@ class SystemOfEquations(Scene):
                 GrowFromCenter(mob.brace),
                 FadeIn(mob.words)
             )
-            self.next_section()
+            # self.next_section()
             self.play(*list(map(FadeOut, [mob.brace, mob.words])))
-        self.next_section()
+        # self.next_section()
         for mob in parts:
             self.play(
                 FadeIn(mob.brace),
                 Write(mob.symbol)
             )
-            self.next_section()
+            # self.next_section()
         compact_equation = VGroup(*[
             mob.symbol for mob in parts
         ])
@@ -358,7 +358,7 @@ class SystemOfEquations(Scene):
             compact_equation.copy(), 
             compact_equation.target
         ))
-        self.next_section()
+        # self.next_section()
 61
 
 class LinearSystemTransformationSceneOne(LinearTransformationScene):
@@ -393,7 +393,7 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
         self.add_foreground_mobject(equa)
         self.play(GrowFromCenter(brace), Write(words, run_time = 1))
         matrix = np.array([[2, 1], [2, 3]])
-        self.next_section()
+        # self.next_section()
         self.moving_mobjects = []
         self.apply_matrix(matrix.T)
         self.wait()
@@ -408,7 +408,7 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
         self.moving_mobjects = []
         self.apply_inverse(matrix.T, run_time=0.01)
         self.remove(self.i_hat,self.j_hat)
-        self.next_section()
+        # self.next_section()
         self.play(
             Create(v),
             Write(v_label)
@@ -419,7 +419,7 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
             Create(x),
             Write(x_label)
         )
-        self.next_section()
+        # self.next_section()
         """ self.wait()
         self.add(VGroup(x, x_label).copy().fade())
         self.moving_mobjects = []
@@ -484,7 +484,7 @@ class LinearSystemTransformationSceneTwo(LinearTransformationScene):
         self.add(VGroup(x, x_label).copy().fade())
         self.moving_mobjects = []
         self.apply_transposed_matrix(matrix)
-        self.next_section()
+        # self.next_section()
 63
 class SystemOfTwoEquationsTwoUnknowns(Scene):
     def construct(self):
@@ -526,11 +526,11 @@ class SystemOfTwoEquationsTwoUnknowns(Scene):
 
         self.add(system)
         self.play(Write(matrix_system))
-        self.next_section()
+        # self.next_section()
         for mob in matrix, v, x:
             self.play(Write(mob.brace))
-            self.next_section()
-        self.next_section()
+            # self.next_section()
+        # self.next_section()
 64
 class Inverse1(LinearTransformationScene):
     def __init__(self):
@@ -555,7 +555,7 @@ class Inverse1(LinearTransformationScene):
             first = VGroup(text1, matrix1, matrix1brace, matrix1bracetext)
 
             self.add_foreground_mobject(first)
-            self.next_section()
+            # self.next_section()
 
             matrix2 = Matrix([["1/3","-1/6"],["0","1/2"]]).set_color(YELLOW).add_background_rectangle()
             matrix2.to_corner(UP+RIGHT)
@@ -591,7 +591,7 @@ class Inverse2(LinearTransformationScene):
             self.add_foreground_mobject(first)
 
             self.apply_transposed_matrix([[0,1],[-1,0]])
-            self.next_section()
+            # self.next_section()
 
             matrix2 = Matrix([["0","1"],["-1","0"]]).set_color(YELLOW).add_background_rectangle()
             matrix2.to_corner(UP+RIGHT)

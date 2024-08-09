@@ -161,3 +161,6 @@ cython_debug/
 
 media/
 final/
+slides/
+index_assets/
+index.html
