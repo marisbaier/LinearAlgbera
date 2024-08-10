@@ -1,6 +1,5 @@
 from manim import *
-# from manim_editor import PresentationSectionType
-from manim_slides import *
+from manim_slides import Slide
 from manim.opengl import *
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
@@ -14,7 +13,7 @@ class CoordinatesAsScalars(VectorSlide):
         numberplane = NumberPlane(faded_line_ratio=2, background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
         self.add(numberplane)
 
-        # self.next_section()  
+        self.next_slide()
 
         v = Vector([1,2], color=YELLOW, stroke_width=2)
         self.play(Create(v))

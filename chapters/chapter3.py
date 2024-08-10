@@ -1,9 +1,12 @@
 from manim import *
-# from manim_editor import PresentationSectionType
+from manim_slides import Slide
 from manim.opengl import *
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
+
+class LinearTransformationSlide(Slide, LinearTransformationScene):
+    pass
 
 class Erweiterung(Scene):
     def construct(self):
@@ -11,7 +14,7 @@ class Erweiterung(Scene):
         self.play(Write(LineareAbbildung))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         brace = Brace(mobject=LineareAbbildung[0][7:16], direction=DOWN, buff=0.2).shift([0,0.2,0])
         brace_text = brace.get_text("Funktion").scale(0.75).shift([0,0.2,0])
@@ -20,7 +23,7 @@ class Erweiterung(Scene):
         self.play(LineareAbbildung[0][0:7].animate.set_color(GREY), GrowFromCenter(brace), FadeIn(brace_text))
         
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         zero = np.array([0,0,0])
         def polar(r, theta):
@@ -48,7 +51,7 @@ class Erweiterung(Scene):
         self.play(Write(line), Write(line2), Write(line3), Write(line4), Write(line5), Write(line6), Write(line7), Write(line8), Write(line9), Write(f), run_time=0.5)
         
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         curvedarrowin = CurvedArrow(start_point=[-1.2,1.2,0], end_point=[-0.1,0.5,0], angle=-0.6)
         x = Tex("x").move_to([-1.5,1.2,0])
@@ -59,7 +62,7 @@ class Erweiterung(Scene):
         self.play(Create(curvedarrowout), Write(y))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         box = VGroup()
         box.add(line,line2,line3,line4,line5,line6,line7,line8,line9,f,x,y,curvedarrowin,curvedarrowout)
@@ -67,20 +70,20 @@ class Erweiterung(Scene):
         self.play(box.animate.shift([-2.2,0,0]), Write(axplusb))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         morefunctions = MathTex(r"&x\mapsto x^2\\&x\mapsto \sqrt{x}\\&x\mapsto\sin(x)\\&x\mapsto e^x").shift([2.95,-1,0])
         self.play(axplusb.animate.shift([0,1.7,0]))
         self.play(Write(morefunctions), run_time=1.5)
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         self.remove(morefunctions)
         self.play(axplusb.animate.shift([0,-1.7,0]))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         self.remove(axplusb)
         axis = Axes(x_range=[-.5,2.5], y_range=[-.5,3.5], x_length=3, y_length=3, tips=False).shift([3,-0.2,0])
@@ -93,7 +96,7 @@ class Erweiterung(Scene):
         self.play(Write(linear_func), FadeIn(strecke))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         poly = axis.plot(
             lambda t: (4*t**3-9*t**2)/10+1.5,
@@ -111,35 +114,35 @@ class Erweiterung(Scene):
         self.play(Write(deriv), Write(point))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         self.play(FadeOut(point), FadeOut(deriv), FadeOut(poly), FadeOut(axis))
         self.play(box.animate.shift([2.2,0,0]))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         x1x2x3 = MathTex(r"x_1, x_2, ... , x_n", font_size=35).move_to([-2.35,1.2,0])
         y1y2y3 = MathTex(r"y_1, y_2, ... , y_m", font_size=35).move_to([2.7,-2,0])
         self.play(ReplacementTransform(x, x1x2x3))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         x1x2vector = MathTex(r"(x_1, x_2, ... , x_n)", font_size=35).move_to([-2.4,1.2,0])
         self.play(ReplacementTransform(x1x2x3,x1x2vector))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         self.play(ReplacementTransform(y, y1y2y3))
         y1y2vector = MathTex(r"(y_1, y_2, ... , y_m)", font_size=35).move_to([2.7,-2,0])
         self.play(ReplacementTransform(y1y2y3,y1y2vector))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 16
-class TransformJustOneVector(LinearTransformationScene):
+class TransformJustOneVector(LinearTransformationSlide):
     def __init__(self):
         LinearTransformationScene.__init__(
             self,
@@ -166,9 +169,9 @@ class TransformJustOneVector(LinearTransformationScene):
             v.label.next_to(v.get_end(), UP)
             v.label.set_color(v.get_color())
             self.play(Create(v))
-            # self.next_section()
+            self.next_slide()
             self.play(Write(v.label))
-            # self.next_section()
+            self.next_slide()
 
         self.remove(v2)
         self.play(
@@ -179,7 +182,7 @@ class TransformJustOneVector(LinearTransformationScene):
             ApplyMethod(v1.fade),
             ApplyMethod(v1.label.fade)
         )
-        # self.next_section()
+        self.next_slide()
 17
 class MultipleVectors(Scene):
     def construct(self):
@@ -201,7 +204,7 @@ class MultipleVectors(Scene):
             for v in vectors.split()
         ])
         transformed_vectors.set_submobject_colors_by_gradient(PINK, PURE_BLUE, BLUE, GREEN_E, YELLOW)
-        # self.next_section()
+        self.next_slide()
         self.play(Transform(
                 vectors, transformed_vectors,
                 run_time = 3,
@@ -223,9 +226,9 @@ class MultipleVectors(Scene):
             for y in np.arange(-int(4)+0.5, int(4)+0.5)
         ])
         dots.set_submobject_colors_by_gradient(PINK, PURE_BLUE, BLUE, GREEN_E, YELLOW)
-        # self.next_section()
+        self.next_slide()
         self.play(Transform(vectors, dots, run_time=3))
-        # self.next_section()
+        self.next_slide()
         transformed_dots = VGroup(*[
             Dot([2*x+y, 2*y+x, 0])
             for x in np.arange(-int(7)+0.5, int(7)+0.5)
@@ -240,7 +243,7 @@ class MultipleVectors(Scene):
             ))
         self.next_section(type=PresentationSectionType.NORMAL)
 18
-class TransformInfiniteGrid(LinearTransformationScene):
+class TransformInfiniteGrid(LinearTransformationSlide):
     def __init__(self):
         LinearTransformationScene.__init__(
             self,
@@ -252,15 +255,15 @@ class TransformInfiniteGrid(LinearTransformationScene):
         )
 
     def construct(self):
-        # self.next_section()
+        self.next_slide()
         self.wait()
         self.moving_mobjects = []
-        # self.next_section()
+        self.next_slide()
         matrix = [[2, 1], [1, 2]]
         self.apply_matrix(matrix)
         self.wait()
 19
-class TransformInfiniteGridWithBackground(LinearTransformationScene):
+class TransformInfiniteGridWithBackground(LinearTransformationSlide):
     def __init__(self):
         LinearTransformationScene.__init__(
             self,
@@ -272,10 +275,10 @@ class TransformInfiniteGridWithBackground(LinearTransformationScene):
         )
 
     def construct(self):
-        # self.next_section()
+        self.next_slide()
         self.wait()
         self.moving_mobjects = []
-        # self.next_section()
+        self.next_slide()
         matrix = [[2, 1], [1, 2]]
         self.apply_matrix(matrix)
         self.wait(2)
@@ -294,7 +297,7 @@ class ApplyComplexFunction(LinearTransformationScene):
     def construct(self):
         self.wait()
         self.moving_mobjects = []
-        # self.next_section()
+        self.next_slide()
         self.plane.prepare_for_nonlinear_transform(100)
         self.wait()
         self.play(ApplyMethod(
@@ -318,7 +321,7 @@ class ExponentialTransformation(LinearTransformationScene):
     def construct(self):
         self.wait()
         self.moving_mobjects = []
-        # self.next_section()
+        self.next_slide()
         self.plane.prepare_for_nonlinear_transform(100)
         self.wait()
         self.play(ApplyMethod(
@@ -342,7 +345,7 @@ class CrazyTransformation(LinearTransformationScene):
     def construct(self):
         self.wait()
         self.moving_mobjects = []
-        # self.next_section()
+        self.next_slide()
         self.plane.prepare_for_nonlinear_transform(100)
         self.wait()
         self.play(ApplyMethod(
@@ -362,7 +365,7 @@ class Back(Scene):
         self.add(LineareAbbildung, brace, brace_text)
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         brace2 = Brace(mobject=LineareAbbildung[0][0:7], direction=DOWN, buff=0.2)
         brace2_text = brace2.get_text('''Was ist ``linear''?''').scale(0.75).shift([0,0.2,0])
@@ -395,7 +398,7 @@ class TransformInfiniteGridWithBackground2(LinearTransformationScene):
         self.apply_matrix(matrix)
         
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         lines_rule = Tex("Linien bleiben Linien")
         lines_rule.shift(2*UP).to_edge(LEFT)
@@ -418,7 +421,7 @@ class TransformInfiniteGridWithBackground2(LinearTransformationScene):
             GrowFromCenter(dot)
         )
         self.wait()
-        # self.next_section()
+        self.next_slide()
 25
 def curvy_squish(point):
     x, y, z = point
@@ -548,10 +551,10 @@ class GridlinesRemainParallel(LinearTransformationScene):
         )
 
     def construct(self):
-        # self.next_section()
+        self.next_slide()
         self.wait()
         self.moving_mobjects = []
-        # self.next_section()
+        self.next_slide()
         matrix = [[3, 1], [0, 2]]
         self.apply_matrix(matrix)
         self.wait(2)
@@ -620,10 +623,10 @@ class YetAnotherLinearTransformation(LinearTransformationScene):
         text[0].set_color(GREEN)
         text.add_background_rectangle()
 
-        # self.next_section()
+        self.next_slide()
         self.play(Write(text))
 
-        # self.next_section()
+        self.next_slide()
 
         matrix_1 = Matrix([["x_\\text{in}"],["y_\\text{in}"]])
         rightarrow = Tex(r"$\quad\rightarrow \quad????\quad\rightarrow\quad$")
@@ -633,7 +636,7 @@ class YetAnotherLinearTransformation(LinearTransformationScene):
 
         formula.add_background_rectangle()
 
-        # self.next_section()
+        self.next_slide()
 
         self.play(
             ApplyMethod(self.plane.fade, 0.7),
@@ -675,7 +678,7 @@ class Follow_ex_ey(LinearTransformationScene):
         ).scale(0.8)
         self.play(Create(j_hat), Create(j_hat_label))
 
-        # self.next_section()
+        self.next_slide()
         self.play(*list(map(FadeOut, [i_hat_label, j_hat_label])))
         self.moving_mobjects = []
         self.apply_transposed_matrix([[-1, 1], [-2, -1]])
@@ -741,7 +744,7 @@ class TrackBasisVectorsExample(LinearTransformationScene):
 
         self.show_linear_combination(shift=[[-1,2,0],[1.5,0,0]])
 
-        # self.next_section()
+        self.next_slide()
 
         v_def = Tex(r'''Neuer $\vec{\textbf{v}}=-1 (neuer) \vec{\textbf{e}}_x+2 (neuer) \vec{\textbf{e}}_y$''')
         v_def[0][0:8].set_color(YELLOW)
@@ -753,7 +756,7 @@ class TrackBasisVectorsExample(LinearTransformationScene):
 
         self.play(Write(self.v_def))
 
-        # self.next_section()
+        self.next_slide()
 
         t1=Tex("=-1")
         m1 = Matrix([[1],[-2]]).set_row_colors(GREEN,GREEN)
@@ -761,7 +764,7 @@ class TrackBasisVectorsExample(LinearTransformationScene):
         m2 = Matrix([[3],[0]]).set_row_colors(RED,RED)
         group1 = VGroup(t1,m1,t2,m2).arrange().next_to(self.v_def,DOWN).to_edge(LEFT).add_background_rectangle()
         self.play(Write(group1))
-        # self.next_section()
+        self.next_slide()
         m3 = Matrix([["-1(1)+2(3)"],["-1(-2)+2(0)"]])
         t3 = Tex("=")
         m4 = Matrix([[5],[2]])
@@ -815,7 +818,7 @@ class YouGiveMeVector(Scene):
         self.add(exx, eyy)
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         x = Matrix([["x"],["y"]]).set_row_colors(YELLOW,YELLOW)
         m1 = ex.copy()
@@ -829,7 +832,7 @@ class YouGiveMeVector(Scene):
         self.play(FadeIn(x),FadeIn(to),FadeIn(plus),FadeIn(m1),FadeIn(m2))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
         
         self.play(FadeIn(equals), FadeIn(m3))
 36
@@ -846,7 +849,7 @@ class CompletelyDescribed(LinearTransformationScene):
         self.play(Write(exvec), Write(eyvec))
         
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
         matrix = Matrix([[3,2], [-2,1]]).set_column_colors(GREEN,RED).to_edge(UP)
         print(self.mobjects)
@@ -859,7 +862,7 @@ class CompletelyDescribed(LinearTransformationScene):
         
         text = Tex('''"2x2 Matrix"''').to_corner(LEFT+UP)
 
-        # self.next_section()
+        self.next_slide()
         self.play(Write(text))
 
         twovectors = VGroup(*[
@@ -876,7 +879,7 @@ class CompletelyDescribed(LinearTransformationScene):
         self.play(Create(rec1))
         self.play(Create(twovectors[0]), Write(woex))
 
-        # self.next_section()
+        self.next_slide()
         self.play(Create(rec2))
         self.play(Create(twovectors[1]), Write(woey))
 
@@ -896,7 +899,7 @@ class CompletelyDescribed(LinearTransformationScene):
         self.play(Transform(VGroup(matrix,input).copy(),group))
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
         self.clear()
         self.add(text)
         self.wait()
@@ -923,10 +926,10 @@ class CompletelyDescribed(LinearTransformationScene):
         ).arrange().shift(DOWN).shift(2*RIGHT)
         self.play(Transform(VGroup(matrix2,input).copy(),group[0:4]))
 
-        # self.next_section()
+        self.next_slide()
         self.play(Write(group[-2]),Write(group[-1]))
 
-        # self.next_section()
+        self.next_slide()
 
         self.play(matrix2.animate.shift(4.9*LEFT+3.68*DOWN),FadeOut(brace),FadeOut(bracetext))
         self.play(input.animate.next_to(matrix2,RIGHT))
@@ -935,7 +938,7 @@ class CompletelyDescribed(LinearTransformationScene):
         newbrace = Brace(group[0:4])
         btext = Tex("Intuition?!!!!11?!!!").next_to(newbrace, DOWN)
 
-        # self.next_section()
+        self.next_slide()
 
         self.play(Create(newbrace), Write(btext))
 37
@@ -1009,16 +1012,16 @@ class letspractise(LinearTransformationScene):
         m1 = Matrix([[0],[1]]).set_color(GREEN).shift(UP+LEFT).set_z_index(30)
         m2 = Matrix([[-1],[0]]).set_color(RED).shift(2*LEFT+0.2*UP).set_z_index(31)
 
-        # self.next_section()
+        self.next_slide()
         self.play(Write(m1))
-        # self.next_section()
+        self.next_slide()
         self.play(m1[0][0].animate.shift([-5,1.8,0]), m1[0][1].animate.shift([-5,1.65,0]), FadeOut(m1[1]), FadeOut(m1[2]))
-        # self.next_section()
+        self.next_slide()
         self.play(Write(m2))
-        # self.next_section()
+        self.next_slide()
         self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([1.9,0.8,0]), m2[0][1].animate.shift([-5,1.65,0]).shift([1.9,0.8,0]), FadeOut(m2[1]), FadeOut(m2[2]))
 
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         self.apply_inverse_transpose([[0,1],[-1,0]], run_time=1)
         vnew = self.add_vector([1,2,0], color=YELLOW, max_tip_length_to_length_ratio=0.15)
@@ -1058,18 +1061,18 @@ class funTrafo(LinearTransformationScene):
         m1 = Matrix([[1],[0]]).set_color(GREEN).shift(2*RIGHT +0.2*UP).set_z_index(30)
         m2 = Matrix([[1],[1]]).set_color(RED).shift(RIGHT+UP).set_z_index(31)
 
-        # self.next_section()
+        self.next_slide()
         self.play(Write(m1))
-        # self.next_section()
+        self.next_slide()
         self.play(m1[0][0].animate.shift([-5,1.8,0]).shift([-3,0.75,0]), m1[0][1].animate.shift([-5,1.65,0]).shift([-3,0.75,0]), FadeOut(m1[1]), FadeOut(m1[2]))
-        # self.next_section()
+        self.next_slide()
         self.play(Write(m2))
-        # self.next_section()
+        self.next_slide()
         self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([-1,-0.05,0]), m2[0][1].animate.shift([-5,1.65,0]).shift([-1,-0.05,0]), FadeOut(m2[1]), FadeOut(m2[2]))
 
         self.wait()
 
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         self.apply_inverse_transpose([[1,0],[1,1]], run_time=1)
         vnew = self.add_vector([1,2,0], color=YELLOW, max_tip_length_to_length_ratio=0.15)
@@ -1102,13 +1105,13 @@ class UndAndersherum2(LinearTransformationScene):
         self.add(matrix)
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         m1 = Matrix([[1],[2]]).set_color(GREEN).shift(1.7*RIGHT +2.3*UP).set_z_index(30)
         self.apply_transposed_matrix([[1,2],[0,1]])
         self.play(Transform(matrix.copy(),m1))
 
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         m2 = Matrix([[3],[1]]).set_color(RED).shift(3.8*RIGHT +1*UP).set_z_index(30)
         self.apply_transposed_matrix([[-5,0],[3,1]])
@@ -1139,13 +1142,13 @@ class Untervektorraum(LinearTransformationScene):
         self.add(matrix,text,text2)
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         m1 = Matrix([[2],[1]]).set_color(GREEN).shift(1.7*RIGHT-0.6*UP).set_z_index(30)
         self.apply_transposed_matrix([[2,1],[0,1]])
         self.play(Transform(matrix.copy(),m1))
 
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         m2 = Matrix([[-2],[-1]]).set_color(RED).shift(-2.8*RIGHT).set_z_index(30)
         self.apply_transposed_matrix([[2,1],[-2,-1]])
@@ -1163,10 +1166,10 @@ class sumUp(LinearTransformationScene):
         )
 
     def construct(self):
-        # self.next_section()
+        self.next_slide()
         self.wait()
         self.moving_mobjects = []
-        # self.next_section()
+        self.next_slide()
         matrix = [[3, 1], [0, 2]]
         self.apply_matrix(matrix)
         self.wait(2)
@@ -1207,7 +1210,7 @@ class sumUp2(LinearTransformationScene):
         
         text = Tex('''"2x2 Matrix"''').to_corner(LEFT+UP)
 
-        # self.next_section()
+        self.next_slide()
         self.play(Write(text))
 
         twovectors = VGroup(*[
@@ -1224,11 +1227,11 @@ class sumUp2(LinearTransformationScene):
         self.play(Create(rec1))
         self.play(Create(twovectors[0]), Write(woex))
 
-        # self.next_section()
+        self.next_slide()
         self.play(Create(rec2))
         self.play(Create(twovectors[1]), Write(woey))
 
-        # self.next_section()
+        self.next_slide()
 
         self.play(FadeOut(rec1), FadeOut(rec2), FadeOut(twovectors), FadeOut(woex), FadeOut(woey))
 
@@ -1263,13 +1266,13 @@ class YouCanInterpretMatrices(LinearTransformationScene):
         self.add(matrix)
 
         self.wait()
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         m1 = Matrix([[1],[2]]).set_color(GREEN).shift(1.7*RIGHT +2.3*UP).set_z_index(30)
         self.apply_transposed_matrix([[1,2],[0,1]])
         self.play(Transform(matrix.copy(),m1))
 
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         m2 = Matrix([[3],[1]]).set_color(RED).shift(3.8*RIGHT +1*UP).set_z_index(30)
         self.apply_transposed_matrix([[-5,0],[3,1]])

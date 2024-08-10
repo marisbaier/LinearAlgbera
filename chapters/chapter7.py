@@ -1,19 +1,19 @@
 from manim import *
-from manim_editor import PresentationSectionType
+from manim_slides import Slide
 from manim.opengl import *
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
 
 
-class UsefulnessOfMatrices(Scene):
+class UsefulnessOfMatrices(Slide):
     def construct(self):
         title = Tex("Nützlichkeit von Matrizen")
         title.set_color(YELLOW)
         title.to_edge(UP)
         self.add(title)
         self.wait(3) #Play some 3d linear transform over this
-        # self.next_section()
+        self.next_slide()
         equations = MathTex(r"""
             6x - 3y + 2z &= 7 \\
             x + 2y + 5z &= 0 \\
@@ -34,7 +34,7 @@ class UsefulnessOfMatrices(Scene):
         eq_brace = Brace(equations, DOWN)
         eq_words = eq_brace.get_text("Gleichungen")
 
-        # self.next_section()
+        self.next_slide()
         self.play(Transform(syms.copy(), new_syms, path_arc = np.pi/2))
         for brace, words in (sym_brace, unknowns), (eq_brace, eq_words):
             self.play(
@@ -43,9 +43,9 @@ class UsefulnessOfMatrices(Scene):
             )
             self.wait()
         self.remove()
-        # self.next_section()
+        self.next_slide()
 59
-class ComplicatedSystem(Scene):
+class ComplicatedSystem(Slide):
     def construct(self):
         system = MathTex(r"""
             \frac{1}{1-e^{2x-3y+4z}} &= 1 \\
@@ -61,12 +61,12 @@ class ComplicatedSystem(Scene):
         #self.play(Blink(randy))
         self.wait()
 60
-class SystemOfEquations(Scene):
+class SystemOfEquations(Slide):
     def construct(self):
         equations = self.get_equations()
-        # self.next_section()
+        self.next_slide()
         self.show_linearity_rules(equations)
-        # self.next_section()
+        self.next_slide()
         self.describe_organization(equations)
         self.factor_into_matrix(equations)
 
@@ -119,7 +119,7 @@ class SystemOfEquations(Scene):
         scalars = VGroup(*[m.split()[0] for m in scaled_vars.split()])
         plusses = VGroup(*[top_equation.split()[2],top_equation.split()[5]])
 
-        # self.next_section()
+        self.next_slide()
 
         self.play(other_equations.animate.fade())
         self.play(Transform(scaled_vars, isolated_scaled_vars))
@@ -129,7 +129,7 @@ class SystemOfEquations(Scene):
             for m in scalars.split()
         ])
 
-        # self.next_section()
+        self.next_slide()
         
         self.remove(scalars)
         self.play(scaled_vars.animate.restore())
@@ -229,9 +229,9 @@ class SystemOfEquations(Scene):
                 FadeIn(mob.square),
                 FadeIn(mob.words)
             )
-            # self.next_section()
+            self.next_slide()
             self.play(*list(map(FadeOut, [mob.square, mob.words])))
-        # self.next_section()
+        self.next_slide()
         self.play(
             Create(zero_circles),
             Write(zero_circles.words, run_time = 1)
@@ -243,10 +243,10 @@ class SystemOfEquations(Scene):
         title.scale(1.5)
         title.to_edge(UP)
 
-        # self.next_section()
+        self.next_slide()
  
         self.play(Write(title))
-        # self.next_section()
+        self.next_slide()
         self.play(FadeOut(title))
     
     def factor_into_matrix(self, equations):
@@ -335,15 +335,15 @@ class SystemOfEquations(Scene):
                 GrowFromCenter(mob.brace),
                 FadeIn(mob.words)
             )
-            # self.next_section()
+            self.next_slide()
             self.play(*list(map(FadeOut, [mob.brace, mob.words])))
-        # self.next_section()
+        self.next_slide()
         for mob in parts:
             self.play(
                 FadeIn(mob.brace),
                 Write(mob.symbol)
             )
-            # self.next_section()
+            self.next_slide()
         compact_equation = VGroup(*[
             mob.symbol for mob in parts
         ])
@@ -358,7 +358,7 @@ class SystemOfEquations(Scene):
             compact_equation.copy(), 
             compact_equation.target
         ))
-        # self.next_section()
+        self.next_slide()
 61
 
 class LinearSystemTransformationSceneOne(LinearTransformationScene):
@@ -393,7 +393,7 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
         self.add_foreground_mobject(equa)
         self.play(GrowFromCenter(brace), Write(words, run_time = 1))
         matrix = np.array([[2, 1], [2, 3]])
-        # self.next_section()
+        self.next_slide()
         self.moving_mobjects = []
         self.apply_matrix(matrix.T)
         self.wait()
@@ -408,7 +408,7 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
         self.moving_mobjects = []
         self.apply_inverse(matrix.T, run_time=0.01)
         self.remove(self.i_hat,self.j_hat)
-        # self.next_section()
+        self.next_slide()
         self.play(
             Create(v),
             Write(v_label)
@@ -419,7 +419,7 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
             Create(x),
             Write(x_label)
         )
-        # self.next_section()
+        self.next_slide()
         """ self.wait()
         self.add(VGroup(x, x_label).copy().fade())
         self.moving_mobjects = []
@@ -484,9 +484,9 @@ class LinearSystemTransformationSceneTwo(LinearTransformationScene):
         self.add(VGroup(x, x_label).copy().fade())
         self.moving_mobjects = []
         self.apply_transposed_matrix(matrix)
-        # self.next_section()
+        self.next_slide()
 63
-class SystemOfTwoEquationsTwoUnknowns(Scene):
+class SystemOfTwoEquationsTwoUnknowns(Slide):
     def construct(self):
         system = Tex(r"""\begin{align*}
             2x + 2y &= -4 \\
@@ -526,11 +526,11 @@ class SystemOfTwoEquationsTwoUnknowns(Scene):
 
         self.add(system)
         self.play(Write(matrix_system))
-        # self.next_section()
+        self.next_slide()
         for mob in matrix, v, x:
             self.play(Write(mob.brace))
-            # self.next_section()
-        # self.next_section()
+            self.next_slide()
+        self.next_slide()
 64
 class Inverse1(LinearTransformationScene):
     def __init__(self):
@@ -555,7 +555,7 @@ class Inverse1(LinearTransformationScene):
             first = VGroup(text1, matrix1, matrix1brace, matrix1bracetext)
 
             self.add_foreground_mobject(first)
-            # self.next_section()
+            self.next_slide()
 
             matrix2 = Matrix([["1/3","-1/6"],["0","1/2"]]).set_color(YELLOW).add_background_rectangle()
             matrix2.to_corner(UP+RIGHT)
@@ -591,7 +591,7 @@ class Inverse2(LinearTransformationScene):
             self.add_foreground_mobject(first)
 
             self.apply_transposed_matrix([[0,1],[-1,0]])
-            # self.next_section()
+            self.next_slide()
 
             matrix2 = Matrix([["0","1"],["-1","0"]]).set_color(YELLOW).add_background_rectangle()
             matrix2.to_corner(UP+RIGHT)

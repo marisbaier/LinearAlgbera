@@ -1,5 +1,4 @@
 from manim import *
-from manim_editor import PresentationSectionType
 from manim.opengl import *
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
@@ -20,7 +19,7 @@ class stretchspace(LinearTransformationScene):
     def construct(self):
             text=Tex("Dehnt den Raum aus").to_edge(UP).add_background_rectangle()
             self.add(text)
-            # self.next_section()
+            self.next_slide()
             self.apply_transposed_matrix([[3,1],[-1,2]])
 55
 class compressspace(LinearTransformationScene):
@@ -38,7 +37,7 @@ class compressspace(LinearTransformationScene):
     def construct(self):
             text=Tex("Komprimiert den Raum").to_edge(UP).add_background_rectangle()
             self.add(text)
-            # self.next_section()
+            self.next_slide()
             self.apply_transposed_matrix([[0.5,-0.5],[1,0.25]])
 56
 class Blob(Circle):
@@ -84,7 +83,7 @@ class exactlyhowmuch(LinearTransformationScene):
     def construct(self):
             text=Tex("Wie sehr wird gestreckt?", color=YELLOW).to_corner(UP+RIGHT).add_background_rectangle()
             self.add(text)
-            # self.next_section()
+            self.next_slide()
             self.apply_transposed_matrix([[2,1],[-1,3]])
 57
 class exactlyhowmuch2(LinearTransformationScene):
@@ -107,7 +106,7 @@ class exactlyhowmuch2(LinearTransformationScene):
             text2 = Tex("Fläche").add_updater(lambda me: me.move_to(poly.get_center()))
             #text3 = Tex(r"c$\cdot$").add_updater(lambda me: me.next_to(text2,LEFT)).set_color(BLUE)
             self.add_transformable_mobject(poly, text2)#,text3)
-            # self.next_section()
+            self.next_slide()
             #text3.set_color(WHITE)
             self.apply_transposed_matrix([[2,-1],[1,1]])
 58
