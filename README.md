@@ -8,7 +8,7 @@ A small lecture on Linear Algebra mostly based on [this](https://www.youtube.com
 Available as a whole on [this](https://hu-berlin.de/maris) website.
 To compile on your own, a fairly recent install of [ffmpeg](https://ffmpeg.org/download.html) is required, aswell as a running [LaTeX installation](https://www.latex-project.org/get/)
 
-Tested with Python 3.9.13. Does <ins>not</ins> work with python 3.11!
+Tested with Python 3.9.13.
 ```bash
 pip install -r requirements.txt
 ```
