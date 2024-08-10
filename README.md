@@ -15,11 +15,11 @@ pip install -r requirements.txt
 
 Then, compile the scenes with
 ```bash
-manim --save_sections chapter6.py
+./render.sh
 ```
 
 followed by
 ```bash
-manedit
+manim-slides [Scenes]
 ```
 ...to run the presentation
