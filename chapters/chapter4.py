@@ -1,11 +1,14 @@
 from manim import *
-from manim_editor import PresentationSectionType
+from manim_slides import Slide
 from manim.opengl import *
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
 
-class TwoSuccessiveTransformations(LinearTransformationScene):
+class LinearTransformationSlide(Slide, LinearTransformationScene):
+    pass
+
+class TwoSuccessiveTransformations(LinearTransformationSlide):
     """ CONFIG = {
         "foreground_plane_kwargs" : {
             "x_radius" : FRAME_WIDTH,
@@ -15,12 +18,13 @@ class TwoSuccessiveTransformations(LinearTransformationScene):
     } """
     def construct(self):
         self.setup()
+        self.next_section()
         self.apply_transposed_matrix([[2, 1],[1, 2]], run_time=1.3)
         self.moving_mobjects = []
         self.apply_transposed_matrix([[-1, -0.5],[0, -0.5]], run_time=1.5)
         self.wait()
 48
-class RotationThenShear(LinearTransformationScene):
+class RotationThenShear(LinearTransformationSlide):
     def construct(self):
         self.setup()
         text = Tex("Erst Rotation, dann Scheerung", font_size=60).to_edge(UP+LEFT).add_updater(lambda me: me.to_edge(UP+LEFT))
@@ -36,7 +40,7 @@ class RotationThenShear(LinearTransformationScene):
         text.clear_updaters()
         self.wait()
 49
-class RotationThenShear2(LinearTransformationScene):
+class RotationThenShear2(LinearTransformationSlide):
     def construct(self):
         self.setup()    
         self.apply_transposed_matrix([[0, 1], [-1, 0]], run_time=1.5)
@@ -78,7 +82,7 @@ class RotationThenShear2(LinearTransformationScene):
         self.remove(self.plane, text,text2,ex,ey)
         self.play(matrix.animate.move_to(UP)) """
 50
-class RotationThenShear3(LinearTransformationScene):
+class RotationThenShear3(LinearTransformationSlide):
     def construct(self):
         matrix = Matrix([[1,-1],[1,0]])
         matrix.to_edge(UP).add_background_rectangle()
@@ -91,7 +95,7 @@ class RotationThenShear3(LinearTransformationScene):
         self.apply_transposed_matrix([[1, 0], [1, 1]], run_time=1.5)
         self.wait()
 51
-class OneWayToThinkAboutIt(LinearTransformationScene):
+class OneWayToThinkAboutIt(LinearTransformationSlide):
     def construct(self):
         self.setup()
         v = self.add_vector([2,3,0], color=YELLOW)
@@ -101,7 +105,7 @@ class OneWayToThinkAboutIt(LinearTransformationScene):
         self.apply_transposed_matrix([[1, 0], [1, 1]], run_time=1.5)
         self.wait()
 52
-class OneWayToThinkAboutIt2(Scene):
+class OneWayToThinkAboutIt2(Slide):
     def construct(self):
         v = Matrix([["x"],["y"]])
         v.set_row_colors(YELLOW, YELLOW)
@@ -150,9 +154,9 @@ class OneWayToThinkAboutIt2(Scene):
         text2 = Tex("f(g(x))").scale(0.7).next_to(text,UP)
         self.play(Write(text2))
 53
-class Composition(LinearTransformationScene):
+class Composition(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,

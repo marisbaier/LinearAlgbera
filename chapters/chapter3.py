@@ -8,7 +8,7 @@ Tex.set_default(color=WHITE)
 class LinearTransformationSlide(Slide, LinearTransformationScene):
     pass
 
-class Erweiterung(Scene):
+class Erweiterung(Slide):
     def construct(self):
         LineareAbbildung = Tex("Lineare Abbildung").move_to([0,3,0])
         self.play(Write(LineareAbbildung))
@@ -144,7 +144,7 @@ class Erweiterung(Scene):
 16
 class TransformJustOneVector(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -184,7 +184,7 @@ class TransformJustOneVector(LinearTransformationSlide):
         )
         self.next_slide()
 17
-class MultipleVectors(Scene):
+class MultipleVectors(Slide):
     def construct(self):
         numberplane = NumberPlane()
         self.add(numberplane)
@@ -210,7 +210,7 @@ class MultipleVectors(Scene):
                 run_time = 3,
                 path_arc = -np.pi/2
             ))
-        self.next_section(type=PresentationSectionType.NORMAL)
+        self.next_slide()
         self.remove(vectors)
         vectors = VGroup(*[
             Vector([x, y], tip_length=0.2)
@@ -236,16 +236,16 @@ class MultipleVectors(Scene):
         ])
         transformed_dots.set_submobject_colors_by_gradient(PINK, PURE_BLUE, BLUE, GREEN_E, YELLOW)
         self.remove(vectors)
-        self.next_section(type=PresentationSectionType.NORMAL)
+        self.next_slide()
         self.play(Transform(
                 dots, transformed_dots,
                 run_time=3,
             ))
-        self.next_section(type=PresentationSectionType.NORMAL)
+        self.next_slide()
 18
 class TransformInfiniteGrid(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=True,
             leave_ghost_vectors=True,
@@ -265,7 +265,7 @@ class TransformInfiniteGrid(LinearTransformationSlide):
 19
 class TransformInfiniteGridWithBackground(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -283,9 +283,9 @@ class TransformInfiniteGridWithBackground(LinearTransformationSlide):
         self.apply_matrix(matrix)
         self.wait(2)
 20
-class ApplyComplexFunction(LinearTransformationScene):
+class ApplyComplexFunction(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -307,9 +307,9 @@ class ApplyComplexFunction(LinearTransformationScene):
         ))
         self.wait(2)
 21
-class ExponentialTransformation(LinearTransformationScene):
+class ExponentialTransformation(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -331,9 +331,9 @@ class ExponentialTransformation(LinearTransformationScene):
         ))
         self.wait(2)
 22
-class CrazyTransformation(LinearTransformationScene):
+class CrazyTransformation(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -354,7 +354,7 @@ class CrazyTransformation(LinearTransformationScene):
             path_arc = np.pi/2
         ))
 23
-class Back(Scene):
+class Back(Slide):
     def construct(self):
         LineareAbbildung = Tex("Lineare Abbildung").move_to([0,3,0])
         brace = Brace(mobject=LineareAbbildung[0][7:16], direction=DOWN, buff=0.2).shift([0,0.2,0])
@@ -378,9 +378,9 @@ class Back(Scene):
                   )
         self.wait()
 24
-class TransformInfiniteGridWithBackground2(LinearTransformationScene):
+class TransformInfiniteGridWithBackground2(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -427,9 +427,9 @@ def curvy_squish(point):
     x, y, z = point
     return (x+np.cos(y))*RIGHT + (y+np.sin(x))*UP
 26
-class SimpleNonlinearTransformationScene(LinearTransformationScene):
+class SimpleNonlinearTransformationScene(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -450,9 +450,9 @@ class SimpleNonlinearTransformationScene(LinearTransformationScene):
     def func(self, point):
         return curvy_squish(point)
 27  
-class MovingOrigin(LinearTransformationScene):
+class MovingOrigin(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -476,9 +476,9 @@ class MovingOrigin(LinearTransformationScene):
         matrix_transform = self.get_matrix_transformation([[2, 0], [1, 1]])
         return matrix_transform(point) + 2*UP+3*LEFT
 28
-class SneakyNonlinearTransformation(LinearTransformationScene):
+class SneakyNonlinearTransformation(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -502,9 +502,9 @@ class SneakyNonlinearTransformation(LinearTransformationScene):
         new_y = np.sign(y)*(int(4)+0.5)*smooth(abs(y) / (int(4)+0.5))
         return [new_x, new_y, 0]
 29    
-class SneakyNonlinearTransformationExplained(LinearTransformationScene):
+class SneakyNonlinearTransformationExplained(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -539,9 +539,9 @@ class SneakyNonlinearTransformationExplained(LinearTransformationScene):
         new_y = np.sign(y)*(int(4)+0.5)*smooth(abs(y) / (int(4)+0.5))
         return [new_x, new_y, 0]
 30  
-class GridlinesRemainParallel(LinearTransformationScene):
+class GridlinesRemainParallel(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -566,9 +566,9 @@ class GridlinesRemainParallel(LinearTransformationScene):
         self.play(Write(text))
         self.wait()
 31
-class Rotation(LinearTransformationScene):
+class Rotation(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -591,9 +591,9 @@ class Rotation(LinearTransformationScene):
 
         self.wait()
 32
-class YetAnotherLinearTransformation(LinearTransformationScene):
+class YetAnotherLinearTransformation(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -646,9 +646,9 @@ class YetAnotherLinearTransformation(LinearTransformationScene):
         )
         self.wait()
 33
-class Follow_ex_ey(LinearTransformationScene):
+class Follow_ex_ey(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -684,9 +684,9 @@ class Follow_ex_ey(LinearTransformationScene):
         self.apply_transposed_matrix([[-1, 1], [-2, -1]])
         self.wait()
 34
-class TrackBasisVectorsExample(LinearTransformationScene):
+class TrackBasisVectorsExample(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -801,7 +801,7 @@ class TrackBasisVectorsExample(LinearTransformationScene):
         if clean_up:
             self.play(FadeOut(i_hat_copy), FadeOut(j_hat_copy))
 35  
-class YouGiveMeVector(Scene):
+class YouGiveMeVector(Slide):
     def construct(self):
         exto = Tex(r'''$\vec{e}_x\to$''')
         eyto = Tex(r'''$\vec{e}_y\to$''')
@@ -836,7 +836,7 @@ class YouGiveMeVector(Scene):
         
         self.play(FadeIn(equals), FadeIn(m3))
 36
-class CompletelyDescribed(LinearTransformationScene):
+class CompletelyDescribed(LinearTransformationSlide):
     def construct(self):
         self.setup()
         self.apply_transposed_matrix([[3,-2],[2,1]])
@@ -942,9 +942,9 @@ class CompletelyDescribed(LinearTransformationScene):
 
         self.play(Create(newbrace), Write(btext))
 37
-class isntitmorefun(LinearTransformationScene):
+class isntitmorefun(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -980,9 +980,9 @@ class isntitmorefun(LinearTransformationScene):
 
         self.play(Create(Vector([-1,3,0], color=YELLOW)))
 38
-class letspractise(LinearTransformationScene):
+class letspractise(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -1031,9 +1031,9 @@ class letspractise(LinearTransformationScene):
         xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT)
         self.play(Write(xvector))
 39
-class funTrafo(LinearTransformationScene):
+class funTrafo(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -1082,14 +1082,14 @@ class funTrafo(LinearTransformationScene):
         xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT)
         self.play(Write(xvector))
 40
-class UndAndersherum(Scene):
+class UndAndersherum(Slide):
     def construct(self):
         text = Tex("Und andersherum?")
         self.play(Write(text))
 41
-class UndAndersherum2(LinearTransformationScene):
+class UndAndersherum2(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -1117,14 +1117,14 @@ class UndAndersherum2(LinearTransformationScene):
         self.apply_transposed_matrix([[-5,0],[3,1]])
         self.play(Transform(matrix.copy(),m2))
 42
-class Mitmachspiel(Scene):
+class Mitmachspiel(Slide):
     def construct(self):
         text = Tex("Mitmachspiel!!!!!!").set_color_by_gradient(RED,YELLOW,PINK)
         self.play(Write(text))
 43
-class Untervektorraum(LinearTransformationScene):
+class Untervektorraum(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -1154,9 +1154,9 @@ class Untervektorraum(LinearTransformationScene):
         self.apply_transposed_matrix([[2,1],[-2,-1]])
         self.play(Transform(matrix.copy(),m2))
 44
-class sumUp(LinearTransformationScene):
+class sumUp(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -1181,9 +1181,9 @@ class sumUp(LinearTransformationScene):
         self.play(Write(text))
         self.wait()
 45
-class sumUp2(LinearTransformationScene):
+class sumUp2(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=True,
@@ -1248,9 +1248,9 @@ class sumUp2(LinearTransformationScene):
     
         self.play(FadeIn(group))
 46
-class YouCanInterpretMatrices(LinearTransformationScene):
+class YouCanInterpretMatrices(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
