@@ -1,0 +1,3 @@
+#!/bin/bash
+manim-slides render chapters/chapter0.py Intro
+manim-slides render chapters/chapter2.py CoordinatesAsScalars CoordinatesAsScalarsExample WhatIfWeChoseADifferentBasis ShowVaryingLinearCombinations NameLinearCombinations LinearCombinationsWithSumCopies UnluckyCase EvenMoreUnluckyCase NameLinearCombinations2 JustSome3DVectors WasIstDerSpann ThreeDSpan WhatAboutThreeVectors LinearDependence LinearDependence2
