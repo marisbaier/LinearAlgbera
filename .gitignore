@@ -160,8 +160,8 @@ cython_debug/
 #.idea/
 
 media/
-chapters/media/
-final/
 slides/
-index_assets/
-index.html
+chapters/media/
+chapter1_assets/
+chapter2_assets/
+*.html
