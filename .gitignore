@@ -162,6 +162,5 @@ cython_debug/
 media/
 slides/
 chapters/media/
-chapter1_assets/
-chapter2_assets/
+chapter*_assets/
 *.html
