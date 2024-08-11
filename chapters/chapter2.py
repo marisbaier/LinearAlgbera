@@ -8,6 +8,9 @@ Tex.set_default(color=WHITE)
 class VectorSlide(Slide, VectorScene):
     pass
 
+class ThreeDSlide(Slide, ThreeDScene):
+    pass
+
 class CoordinatesAsScalars(VectorSlide):
     def construct(self):
         numberplane = NumberPlane(faded_line_ratio=2, background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
@@ -17,18 +20,26 @@ class CoordinatesAsScalars(VectorSlide):
 
         v = Vector([1,2], color=YELLOW, stroke_width=2)
         self.play(Create(v))
+
+        self.next_slide()
         array, x_line, y_line = self.vector_to_coords(v)
 
         self.add(array)
 
         self.play(array.animate.shift([-0.75,1,0]))
 
+        self.next_slide()
+
         v2 = Vector([3,-2], color=PINK, stroke_width=2)
         self.play(Create(v2))
+
+        self.next_slide()
 
         array2, x_line2, y_line2 = self.vector_to_coords(v2)
 
         self.add(array2)
+
+        self.next_slide()
 
         starting_mobjects = [v,v2]
         starting_mobjects = self.mobjects
@@ -69,20 +80,20 @@ class CoordinatesAsScalars(VectorSlide):
         self.remove(*starting_mobjects)
         self.add(numberplane)
         #self.remove(v,v2, array,array2)
-        # self.next_section()
+        self.next_slide()
         self.play(
             Transform(x, new_x),
             Transform(y, new_y),
             Write(title),
         )
         self.play(FadeIn(i_hat), FadeIn(j_hat))
-        self.wait()
+        self.next_slide()
         self.play(
             Transform(i_hat, new_i_hat),
             Transform(j_hat, new_j_hat),
             run_time = 3
         )
-        # self.next_section()
+        self.next_slide()
         starting_mobjects.remove(array)
         new_x, new_y = np.array(new_array.get_mob_matrix(), dtype=object).flatten()
         v2.set_color(YELLOW)
@@ -118,10 +129,10 @@ class CoordinatesAsScalars(VectorSlide):
             j_hat, "\\vec{e}_y", 
             color = RED, 
             label_scale_factor = 1,
-            animate = False
+            animate = True
         ).scale(0.8)
         
-        # self.next_section()
+        self.next_slide()
         x, y = np.array(new_array.get_mob_matrix(), dtype=object).flatten()
         for coord, v, label, factor, shift_right in [
             (x, i_hat, i_hat_label, 3, False), 
@@ -146,7 +157,7 @@ class CoordinatesAsScalars(VectorSlide):
                 self.play(ApplyMethod(
                     group.shift, 3*RIGHT
                 ))
-        # self.next_section()
+        self.next_slide()
 
         equation = VGroup(*[
             Tex("3"),
@@ -166,9 +177,9 @@ class CoordinatesAsScalars(VectorSlide):
         self.v.set_color(RED)
 
         self.play(Transform(new_array, equa))
-        # self.next_section()
+        self.next_slide()
 1
-class CoordinatesAsScalarsExample(VectorScene):
+class CoordinatesAsScalarsExample(VectorSlide):
     def construct(self):
         numberplane = NumberPlane(faded_line_ratio=2, background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
         self.add(numberplane)
@@ -177,23 +188,26 @@ class CoordinatesAsScalarsExample(VectorScene):
         i_hat_label = self.label_vector(
             i_hat, "\\vec{e}_x", 
             color = GREEN, 
-            label_scale_factor = 1
+            label_scale_factor = 1,
+            animate=True
         ).scale(0.8)
         self.add_vector(j_hat)
         j_hat_label = self.label_vector(
             j_hat, "\\vec{e}_y", 
             color = RED, 
-            label_scale_factor = 1
+            label_scale_factor = 1,
+            animate=True
         ).scale(0.8)
-        self.play(Create(i_hat_label), Create(j_hat_label), run_time=0.01)
+        """ self.play(Create(i_hat_label), Create(j_hat_label), run_time=0.01) """
 
         text = Tex(r'''$\vec{e}_x$ und $\vec{e}_y$ sind\\\ die ``Basisvektoren'' \\\ des Koordinatensystems''')
         text[0][0:3].set_color(GREEN)
         text[0][6:9].set_color(RED)
         text.to_corner(UP+RIGHT)
         self.play(Write(text))
+        self.wait(0.1) # This is a hack to make sure the text is rendered before the next slide
 
-        # self.next_section()
+        self.next_slide()
 
         vector = Vector([-5,2], color=YELLOW)
         label = Matrix([[-5], [2]]).set_row_colors(GREEN, RED)
@@ -252,7 +266,7 @@ class CoordinatesAsScalarsExample(VectorScene):
         self.play(Create(equa))
 # TODO: Transform(label, equa) is not working as it should
 2
-class WhatIfWeChoseADifferentBasis(Scene):
+class WhatIfWeChoseADifferentBasis(Slide):
     def construct(self):
         self.play(Write(
             Tex("Was ist, wenn wir andere Basisvektoren wählen?"),
@@ -260,7 +274,7 @@ class WhatIfWeChoseADifferentBasis(Scene):
         ))
         self.wait(2)
 3
-class ShowVaryingLinearCombinations(VectorScene):
+class ShowVaryingLinearCombinations(VectorSlide):
 
     def construct(self):
         self.vector1 = [1, 2]
@@ -286,9 +300,9 @@ class ShowVaryingLinearCombinations(VectorScene):
         numberplane = NumberPlane(faded_line_ratio=2) #background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
         self.add(numberplane)
         #self.lock_in_faded_grid()
-        # self.next_section()
+        self.next_slide()
         v1 = self.add_vector(self.vector1, color = self.vector1_color)
-        # self.next_section()
+        self.next_slide()
         v2 = self.add_vector(self.vector2, color = self.vector2_color)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, 
@@ -325,7 +339,7 @@ class ShowVaryingLinearCombinations(VectorScene):
             ApplyMethod(v2.fade, 0.7),
             )
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
 
         self.play(v2scaled.animate.shift([1.5,3,0]))
@@ -364,7 +378,7 @@ class ShowVaryingLinearCombinations(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
 4
-class NameLinearCombinations(VectorScene):
+class NameLinearCombinations(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
         self.vector2 = [3, -1]
@@ -377,9 +391,9 @@ class NameLinearCombinations(VectorScene):
         numberplane = NumberPlane()
         self.add(numberplane)
 
-        # self.next_section()
+        self.next_slide()
         v1 = self.add_vector(self.vector1, color = self.vector1_color)
-        # self.next_section()
+        self.next_slide()
         v2 = self.add_vector(self.vector2, color = self.vector2_color)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, 
@@ -389,7 +403,7 @@ class NameLinearCombinations(VectorScene):
             v2, self.vector2_label, color = self.vector2_color, 
             #buff_factor = 3
         )
-        # self.next_section()
+        self.next_slide()
 
         rectangle = Rectangle(color=config.background_color, width=5.5, height=2.4, 
                               stroke_width=250).to_edge(UP+LEFT, buff=0)
@@ -442,7 +456,7 @@ class NameLinearCombinations(VectorScene):
             ApplyMethod(v2.fade, 0.7),
             )
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
 
         self.play(v2scaled.animate.shift([1.5,3,0]))
@@ -481,7 +495,7 @@ class NameLinearCombinations(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
 5
-class LinearCombinationsWithSumCopies(VectorScene):
+class LinearCombinationsWithSumCopies(VectorSlide):
 
     def construct(self):
         self.vector1 = [1, 2]
@@ -507,9 +521,9 @@ class LinearCombinationsWithSumCopies(VectorScene):
         numberplane = NumberPlane(faded_line_ratio=2) #background_line_style={'stroke_color': config.background_color}, faded_line_style={'stroke_color': config.background_color})
         self.add(numberplane)
         #self.lock_in_faded_grid()
-        # self.next_section()
+        self.next_slide()
         v1 = self.add_vector(self.vector1, color = self.vector1_color, animate=False)
-        # self.next_section()
+        self.next_slide()
         v2 = self.add_vector(self.vector2, color = self.vector2_color, animate=False)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, animate=False
@@ -596,7 +610,7 @@ class LinearCombinationsWithSumCopies(VectorScene):
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
 6
-class UnluckyCase(VectorScene):
+class UnluckyCase(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
         self.vector2 = [3, -1]
@@ -661,7 +675,7 @@ class UnluckyCase(VectorScene):
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
 7
-class EvenMoreUnluckyCase(VectorScene):
+class EvenMoreUnluckyCase(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
         self.vector2 = [3, -1]
@@ -687,7 +701,7 @@ class EvenMoreUnluckyCase(VectorScene):
         self.play(Transform(v1,dot), Transform(v2, dot))
         self.wait()
 8
-class NameLinearCombinations2(VectorScene):
+class NameLinearCombinations2(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
         self.vector2 = [3, -1]
@@ -700,9 +714,9 @@ class NameLinearCombinations2(VectorScene):
         numberplane = NumberPlane()
         self.add(numberplane)
 
-        # self.next_section()
+        self.next_slide()
         v1 = self.add_vector(self.vector1, color = self.vector1_color)
-        # self.next_section()
+        self.next_slide()
         v2 = self.add_vector(self.vector2, color = self.vector2_color)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, 
@@ -765,7 +779,7 @@ class NameLinearCombinations2(VectorScene):
             ApplyMethod(v2.fade, 0.7),
             )
         self.wait()
-        # self.next_section()
+        self.next_slide()
 
 
         self.play(v2scaled.animate.shift([1.5,3,0]))
@@ -804,7 +818,7 @@ class NameLinearCombinations2(VectorScene):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
 
-        # self.next_section()
+        self.next_slide()
 
         self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label,v1,v2)
         v1=self.add_vector([1,2], color=MAROON_C)
@@ -853,7 +867,7 @@ class NameLinearCombinations2(VectorScene):
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
 
-        # self.next_section()
+        self.next_slide()
         self.remove(v2scaled,v1scaled,textv1,textv2,v1_label,v2_label)
         v1=self.add_vector([1,2], color=MAROON_C, animate=False)
         v2=self.add_vector([3,-1], color=BLUE, animate=False)
@@ -865,11 +879,11 @@ class NameLinearCombinations2(VectorScene):
 
         
 
-        # self.next_section()
+        self.next_slide()
         self.remove(v2scaled,v1scaled,v3,textv1,textv2,v1_label,v2_label)
 
         v1 = self.add_vector(self.vector1, color = self.vector1_color, animate=False)
-        # self.next_section()
+        self.next_slide()
         v2 = self.add_vector(self.vector2, color = self.vector2_color, animate=False)
         v1_label = self.label_vector(
             v1, self.vector1_label, color = self.vector1_color, animate=False
@@ -956,7 +970,7 @@ class NameLinearCombinations2(VectorScene):
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
 #9
-class JustSome3DVectors(ThreeDScene):
+class JustSome3DVectors(ThreeDSlide):
     def construct(self):
         axes = ThreeDAxes()
         a = np.array([1.5,-1.5,1.5])
@@ -981,11 +995,11 @@ class JustSome3DVectors(ThreeDScene):
         self.play(Write(Tex(r"")))
         self.wait(8)
 10
-class WasIstDerSpann(Scene):
+class WasIstDerSpann(Slide):
     def construct(self):
         self.play(Write(Tex(r"Was ist der Spann im $\mathbb{R}^3$?")))
 #11
-class ThreeDSpan(ThreeDScene):
+class ThreeDSpan(ThreeDSlide):
     def construct(self):
 
         axes = ThreeDAxes()
@@ -1023,7 +1037,7 @@ class ThreeDSpan(ThreeDScene):
         self.play(v1.animate.put_start_and_end_on(ORIGIN,-b*0.5))
         self.wait(8)
 12
-class WhatAboutThreeVectors(ThreeDScene):
+class WhatAboutThreeVectors(ThreeDSlide):
     def construct(self):
         axes = ThreeDAxes()
         a = np.array([1.5,-1.5,1.5])
@@ -1070,7 +1084,7 @@ class WhatAboutThreeVectors(ThreeDScene):
         self.play(group.animate.shift(-0.4*c))
         self.wait(8)
 #13
-class LinearDependence(ThreeDScene):
+class LinearDependence(ThreeDSlide):
     def construct(self):
         axes = ThreeDAxes()
         a = np.array([1.5,-1.5,1.5])
@@ -1102,7 +1116,7 @@ class LinearDependence(ThreeDScene):
         self.add_fixed_in_frame_mobjects(text)
         self.wait(8)
 14
-class LinearDependence2(VectorScene):
+class LinearDependence2(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
         self.vector2 = [3, -1]
