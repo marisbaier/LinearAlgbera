@@ -1,12 +1,15 @@
 from manim import *
-from manim.opengl import *
+from manim_slides import Slide
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
 
-class stretchspace(LinearTransformationScene):
+class LinearTransformationSlide(Slide, LinearTransformationScene):
+    pass
+
+class stretchspace(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -19,12 +22,12 @@ class stretchspace(LinearTransformationScene):
     def construct(self):
             text=Tex("Dehnt den Raum aus").to_edge(UP).add_background_rectangle()
             self.add(text)
-            self.next_slide()
+            self.next_section()
             self.apply_transposed_matrix([[3,1],[-1,2]])
 55
-class compressspace(LinearTransformationScene):
+class compressspace(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -37,10 +40,10 @@ class compressspace(LinearTransformationScene):
     def construct(self):
             text=Tex("Komprimiert den Raum").to_edge(UP).add_background_rectangle()
             self.add(text)
-            self.next_slide()
+            self.next_section()
             self.apply_transposed_matrix([[0.5,-0.5],[1,0.25]])
 56
-class Blob(Circle):
+""" class Blob(Circle):
     CONFIG = {
         "stroke_color" : TEAL,
         "fill_color" : BLUE_E,
@@ -66,11 +69,11 @@ class Blob(Circle):
         min3 = border_points[np.argsort(distances)[:3]]
         center_direction = self.get_center() - point
         in_center_direction = [np.dot(p-point, center_direction) > 0 for p in min3]
-        return sum(in_center_direction) <= 2
+        return sum(in_center_direction) <= 2 """
 
-class exactlyhowmuch(LinearTransformationScene):
+class exactlyhowmuch(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -83,12 +86,12 @@ class exactlyhowmuch(LinearTransformationScene):
     def construct(self):
             text=Tex("Wie sehr wird gestreckt?", color=YELLOW).to_corner(UP+RIGHT).add_background_rectangle()
             self.add(text)
-            self.next_slide()
+            self.next_section()
             self.apply_transposed_matrix([[2,1],[-1,3]])
 57
-class exactlyhowmuch2(LinearTransformationScene):
+class exactlyhowmuch2(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -106,7 +109,7 @@ class exactlyhowmuch2(LinearTransformationScene):
             text2 = Tex("Fläche").add_updater(lambda me: me.move_to(poly.get_center()))
             #text3 = Tex(r"c$\cdot$").add_updater(lambda me: me.next_to(text2,LEFT)).set_color(BLUE)
             self.add_transformable_mobject(poly, text2)#,text3)
-            self.next_slide()
+            self.next_section()
             #text3.set_color(WHITE)
             self.apply_transposed_matrix([[2,-1],[1,1]])
 58

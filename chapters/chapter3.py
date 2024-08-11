@@ -10,6 +10,7 @@ class LinearTransformationSlide(Slide, LinearTransformationScene):
 
 class Erweiterung(Slide):
     def construct(self):
+        self.next_section()
         LineareAbbildung = Tex("Lineare Abbildung").move_to([0,3,0])
         self.play(Write(LineareAbbildung))
 

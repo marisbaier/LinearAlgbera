@@ -1,10 +1,13 @@
 from manim import *
 from manim_slides import Slide
 from manim.opengl import *
+import itertools as it
 config.background_color = DARKER_GRAY
 config["background_color"] = DARKER_GRAY
 Tex.set_default(color=WHITE)
 
+class LinearTransformationSlide(Slide, LinearTransformationScene):
+    pass
 
 class UsefulnessOfMatrices(Slide):
     def construct(self):
@@ -12,7 +15,7 @@ class UsefulnessOfMatrices(Slide):
         title.set_color(YELLOW)
         title.to_edge(UP)
         self.add(title)
-        self.wait(3) #Play some 3d linear transform over this
+        # TODO: Add content
         self.next_slide()
         equations = MathTex(r"""
             6x - 3y + 2z &= 7 \\
@@ -361,9 +364,9 @@ class SystemOfEquations(Slide):
         self.next_slide()
 61
 
-class LinearSystemTransformationSceneOne(LinearTransformationScene):
+class LinearSystemTransformationSceneOne(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=True,
             leave_ghost_vectors=False,
@@ -427,9 +430,9 @@ class LinearSystemTransformationSceneOne(LinearTransformationScene):
         self.apply_transposed_matrix(matrix, show_basis_vectors=False)
         self.wait() """
 62
-class LinearSystemTransformationSceneTwo(LinearTransformationScene):
+class LinearSystemTransformationSceneTwo(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=True,
             leave_ghost_vectors=False,
@@ -532,9 +535,9 @@ class SystemOfTwoEquationsTwoUnknowns(Slide):
             self.next_slide()
         self.next_slide()
 64
-class Inverse1(LinearTransformationScene):
+class Inverse1(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
@@ -567,9 +570,9 @@ class Inverse1(LinearTransformationScene):
             self.play(Transform(first, second), Transform(text1,text2))
             self.apply_inverse_transpose([[3,0],[1,2]])
 65
-class Inverse2(LinearTransformationScene):
+class Inverse2(LinearTransformationSlide):
     def __init__(self):
-        LinearTransformationScene.__init__(
+        LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
             leave_ghost_vectors=False,
