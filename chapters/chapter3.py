@@ -142,7 +142,7 @@ class Erweiterung(Slide):
 
         self.wait()
         self.next_slide()
-16
+
 class TransformJustOneVector(LinearTransformationSlide):
     def __init__(self):
         LinearTransformationSlide.__init__(
@@ -153,7 +153,6 @@ class TransformJustOneVector(LinearTransformationSlide):
             show_basis_vectors=False,
             background_plane_kwargs={'faded_line_ratio':2}
         )
-        #self.setup()
 
     def construct(self):
         numberplane = self.add_plane(animate=True).add_coordinates()

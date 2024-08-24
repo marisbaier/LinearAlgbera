@@ -1,10 +1,16 @@
 from manim import *
 """ from manim_editor import PresentationSectionType """
-from manim_slides import *
+from manim_slides import Slide
 from manim.opengl import *
-config.background_color = DARKER_GRAY
-config["background_color"] = DARKER_GRAY
+config.background_color = BLACK
+config["background_color"] = BLACK
 Tex.set_default(color=WHITE)
+
+class VectorSlide(Slide, VectorScene):
+    pass
+
+class LinearTransformationSlide(Slide, LinearTransformationScene):
+    pass
 
 class Intro(Slide):
     def construct(self):
@@ -122,4 +128,28 @@ class Intro(Slide):
         self.wait()
 
         self.play(FadeOut(axis), FadeOut(linear_func))
-0
+
+class VectorAddition(VectorSlide):
+    def construct(self):
+        numberplane = NumberPlane(faded_line_ratio=2)
+        self.add(numberplane)
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+
+        self.next_slide()
+
+        v = Vector([1,2], color=self.vector1_color, stroke_width=2)
+        self.play(Create(v))
+
+        v1_label = self.label_vector(
+            v, self.vector1_label, color = self.vector1_color,
+        )
+
+        w = Vector([2,2], color=self.vector1_color, stroke_width=2)
+        self.play(Create(v))
+
+        v1_label = self.label_vector(
+            v, self.vector1_label, color = self.vector1_color,
+        )
