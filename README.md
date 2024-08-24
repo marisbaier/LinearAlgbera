@@ -1,7 +1,7 @@
 A small lecture on Linear Algebra mostly based on [this](https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&ab_channel=3Blue1Brown) playlist.
 <br>
 <br>
-![](https://github.com/marisbaier/Brueckenkursvortraege/blob/main/example.gif) 
+![](https://github.com/marisbaier/Brueckenkursvortraege/blob/main/src/example.gif) 
 <br>
 
 ## Setup
