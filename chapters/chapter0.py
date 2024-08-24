@@ -1,10 +1,8 @@
 from manim import *
-""" from manim_editor import PresentationSectionType """
 from manim_slides import Slide
 from manim.opengl import *
-config.background_color = BLACK
-config["background_color"] = BLACK
-Tex.set_default(color=WHITE)
+
+import config
 
 class VectorSlide(Slide, VectorScene):
     pass
