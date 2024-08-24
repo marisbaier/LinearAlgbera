@@ -1,14 +1,9 @@
 from manim import *
 from manim_slides import Slide
-from manim.opengl import *
+from manim.opengl import * # TODO: Check if this is necessary
 
-import config
+from config import VectorSlide
 
-class VectorSlide(Slide, VectorScene):
-    pass
-
-class LinearTransformationSlide(Slide, LinearTransformationScene):
-    pass
 
 class Intro(Slide):
     def construct(self):

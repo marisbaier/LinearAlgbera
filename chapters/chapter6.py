@@ -1,11 +1,8 @@
 from manim import *
 from manim_slides import Slide
-config.background_color = DARKER_GRAY
-config["background_color"] = DARKER_GRAY
-Tex.set_default(color=WHITE)
 
-class LinearTransformationSlide(Slide, LinearTransformationScene):
-    pass
+from config import LinearTransformationSlide
+
 
 class stretchspace(LinearTransformationSlide):
     def __init__(self):

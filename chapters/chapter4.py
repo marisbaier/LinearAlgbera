@@ -1,9 +1,9 @@
 from manim import *
 from manim_slides import Slide
 from manim.opengl import *
-config.background_color = DARKER_GRAY
-config["background_color"] = DARKER_GRAY
-Tex.set_default(color=WHITE)
+
+from config import LinearTransformationSlide
+
 
 class LinearTransformationSlide(Slide, LinearTransformationScene):
     pass

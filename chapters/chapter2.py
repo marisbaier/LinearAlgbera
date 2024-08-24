@@ -1,15 +1,9 @@
 from manim import *
 from manim_slides import Slide
 from manim.opengl import *
-config.background_color = DARKER_GRAY
-config["background_color"] = DARKER_GRAY
-Tex.set_default(color=WHITE)
 
-class VectorSlide(Slide, VectorScene):
-    pass
+from config import VectorSlide, ThreeDSlide
 
-class ThreeDSlide(Slide, ThreeDScene):
-    pass
 
 class CoordinatesAsScalars(VectorSlide):
     def construct(self):

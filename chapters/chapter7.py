@@ -2,12 +2,9 @@ from manim import *
 from manim_slides import Slide
 from manim.opengl import *
 import itertools as it
-config.background_color = DARKER_GRAY
-config["background_color"] = DARKER_GRAY
-Tex.set_default(color=WHITE)
 
-class LinearTransformationSlide(Slide, LinearTransformationScene):
-    pass
+from config import LinearTransformationSlide
+
 
 class UsefulnessOfMatrices(Slide):
     def construct(self):
