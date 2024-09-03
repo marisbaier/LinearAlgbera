@@ -1,6 +1,5 @@
 from manim import *
 from manim_slides import Slide
-from manim.opengl import *
 
 from config import VectorSlide, ThreeDSlide
 

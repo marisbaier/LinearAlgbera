@@ -1,6 +1,5 @@
 from manim import *
 from manim_slides import Slide
-from manim.opengl import * # TODO: Check if this is necessary
 
 from config import VectorSlide
 
