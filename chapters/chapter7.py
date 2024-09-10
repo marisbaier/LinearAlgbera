@@ -5,20 +5,65 @@ import itertools as it
 from config import LinearTransformationSlide
 
 
+class LinearTransformationSlide(Slide, LinearTransformationScene):
+    pass
+
+class LinearSystemTransformationSlide(LinearTransformationSlide):
+    def setup(self):
+        LinearTransformationSlide.setup(self)
+        equation = VGroup(*[
+            Tex("A"),
+            Tex(r"$\vec{\textbf{x}}$"),
+            Tex("="),
+            Tex(r"$\vec{\textbf{b}}$"),
+        ])
+        equation.scale(1.5)
+        self.equation = equation
+        self.A, self.x, eq, self.v = equation.split()
+        self.x.set_color(PINK)
+        self.v.set_color(YELLOW)
+        equa = VGroup(*[self.A,self.x,eq,self.v])
+        equa.arrange(buff=0.1)
+        equa.next_to(ORIGIN, LEFT).to_edge(UP)
+        equa.add_background_rectangle()
+        self.add_foreground_mobject(equa)
+
+class Test(LinearSystemTransformationSlide):
+    def construct(self):
+        self.t_matrix = np.array([[2, 1], [2, 3]])
+        self.setup()
+        brace = Brace(self.A)
+        words = brace.get_text("Transformation")
+        words.add_background_rectangle()
+        self.play(GrowFromCenter(brace), Write(words, run_time = 1))
+        self.add_foreground_mobject(words, brace)
+        self.moving_mobjects = []
+        self.apply_transposed_matrix(self.t_matrix)
+        self.wait()
+
 class UsefulnessOfMatrices(Slide):
     def construct(self):
         title = Tex("Nützlichkeit von Matrizen")
         title.set_color(YELLOW)
         title.to_edge(UP)
-        self.add(title)
         # TODO: Add content
         self.next_slide()
+        self.play(Write(title))
+
+        V1 = ImageMobject("src/images/ENIAC-changing_a_tube.jpg")
+        V1.scale(0.7)
+        self.add(V1)
+
+        self.next_slide()
+        self.remove(V1)
+
         equations = MathTex(r"""
             6x - 3y + 2z &= 7 \\
             x + 2y + 5z &= 0 \\
             2x - 8y - z &= -2 \\
         """)
         equations.to_edge(RIGHT, buff = 2)
+        self.next_slide()
         self.play(Write(equations))
         #self.play(Create(equations[0][1].copy().shift([-2,0,0])))
         syms = VGroup(*[equations[0][i] for i in [1, 4, 7]])
@@ -63,6 +108,8 @@ class ComplicatedSystem(Slide):
 class SystemOfEquations(Slide):
     def construct(self):
         equations = self.get_equations()
+        self.play(Write(equations))
+        self.add(equations)
         self.next_slide()
         self.show_linearity_rules(equations)
         self.next_slide()
@@ -99,8 +146,6 @@ class SystemOfEquations(Slide):
             rhs_elem.next_to(eq, RIGHT)
             eq.add(rhs_elem)
         equations.center()
-        self.play(Write(equations))
-        self.add(equations)
         return equations
 
     def show_linearity_rules(self, equations):
@@ -484,7 +529,109 @@ class LinearSystemTransformationSceneTwo(LinearTransformationSlide):
         self.moving_mobjects = []
         self.apply_transposed_matrix(matrix)
         self.next_slide()
-63
+
+class ThinkAboutWhatsHappening(Slide):
+    def construct(self):
+        V1 = ImageMobject("src/images/logo.png")
+        V1.scale(0.6)
+        V1.to_corner(DOWN+LEFT)
+        V1.shift(DOWN*2.5)
+        self.add(V1)
+        self.wait(0.1)
+        equations = SystemOfEquations.get_equations(self)
+        equations.shift(RIGHT+UP*1.2).shift(LEFT*1.4+DOWN*0.6)
+        e0 = Ellipse(width=1.35, height=0.7, color=WHITE)
+        e1 = Ellipse(width=0.8, height=0.45, color=WHITE)
+        e2 = Ellipse(width=0.45, height=0.2, color=WHITE)
+        e0.shift(LEFT*2.2+UP*0.15)
+        e1.shift(LEFT*3.2+DOWN*0.55)
+        e2.shift(LEFT*4+DOWN*0.9)
+        self.play(Write(equations), Create(e1), Create(e2)) #, Create(e0)
+        self.add(equations)
+        self.wait(1)
+
+class LinearSystemTransformationSceneTwoButFaster(LinearTransformationSlide):
+    def __init__(self):
+        LinearTransformationSlide.__init__(
+            self,
+            show_coordinates=True,
+            leave_ghost_vectors=False,
+            show_basis_vectors=False
+        )
+
+    def construct(self):
+        equation = VGroup(*[
+            Tex("A"),
+            Tex(r"$\vec{\textbf{x}}$"),
+            Tex("="),
+            Tex(r"$\vec{\textbf{b}}$"),
+        ])
+        equation.scale(1.5)
+        self.equation = equation
+        self.A, self.x, eq, self.v = equation.split()
+        self.x.set_color(PINK)
+        self.v.set_color(YELLOW)
+        equa = VGroup(*[self.A,self.x,eq,self.v])
+        equa.arrange(buff=0.1)
+        equa.next_to(ORIGIN, LEFT).to_edge(UP)
+        equa.add_background_rectangle()
+        brace = Brace(self.A)
+        words = brace.get_text("Transformation")
+        words.add_background_rectangle()
+        #self.add_foreground_mobject(words, brace)
+        self.add_foreground_mobject(equa)
+        self.add(brace)
+        self.add(words)
+        matrix = np.array([[2, 1], [2, 3]])
+        self.moving_mobjects = []
+        #self.apply_matrix(matrix,run_time=0.001)
+        v = [-4, -1]
+        x = np.linalg.solve(matrix.T, v)
+        v = Vector(v, color = YELLOW)
+        x = Vector(x, color = PINK)
+        self.add(v)
+        v_label = self.get_vector_label(v, "b", color = YELLOW)
+        x_label = self.get_vector_label(x, "x", color = PINK)
+        for label in x_label, v_label:
+            label.add_background_rectangle()
+        """ self.apply_inverse(matrix, run_time=0.01)
+        self.remove(self.basis_vectors)
+        self.play(
+            Create(v),
+            Write(v_label)
+        ) """
+        self.add_foreground_mobject(v_label)
+        x = self.add_vector(x, animate = False)
+        self.add(x)
+        self.add(x_label)
+        self.add(VGroup(x, x_label).copy().fade())
+        self.moving_mobjects = []
+        self.wait(1)
+        self.apply_transposed_matrix(matrix, run_time=1)
+        self.next_slide()
+
+class LabeledExample(LinearSystemTransformationSlide):
+    CONFIG = {
+        "title" : "",
+        "t_matrix" : [[0, 0], [0, 0]],
+        "show_square" : False,
+    }
+    def setup(self):
+        LinearSystemTransformationSlide.setup(self)
+        title = Tex(self.title)
+        title.next_to(self.equation, DOWN, buff = 1)
+        title.add_background_rectangle()
+        title.shift_onto_screen()
+        self.add_foreground_mobject(title)        
+        self.title = title
+        if self.show_square:
+            self.add_unit_square()
+
+    def construct(self):
+        self.wait()
+        self.apply_transposed_matrix(self.t_matrix)
+        self.wait()
+
 class SystemOfTwoEquationsTwoUnknowns(Slide):
     def construct(self):
         system = Tex(r"""\begin{align*}
@@ -530,7 +677,7 @@ class SystemOfTwoEquationsTwoUnknowns(Slide):
             self.play(Write(mob.brace))
             self.next_slide()
         self.next_slide()
-64
+
 class Inverse1(LinearTransformationSlide):
     def __init__(self):
         LinearTransformationSlide.__init__(
