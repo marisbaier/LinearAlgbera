@@ -258,7 +258,7 @@ class CoordinatesAsScalarsExample(VectorSlide):
         print(self.mobjects)
         self.play(Create(equa))
 # TODO: Transform(label, equa) is not working as it should
-2
+
 class WhatIfWeChoseADifferentBasis(Slide):
     def construct(self):
         self.play(Write(
@@ -370,7 +370,7 @@ class ShowVaryingLinearCombinations(VectorSlide):
         self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
-4
+
 class NameLinearCombinations(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
@@ -487,9 +487,99 @@ class NameLinearCombinations(VectorSlide):
         self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-0.8,-1.65,0]))
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
-5
-class LinearCombinationsWithSumCopies(VectorSlide):
 
+class UnluckyCase(VectorSlide):
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+        self.scalar_pairs = [
+                (1.5, 0.6),
+                (0.7, 1.3),
+                (-1, -1.5),
+                (1, -1.13),
+                (1.25, 0.5),
+                (-0.8, 1.3),
+            ]
+        numberplane = NumberPlane(faded_line_ratio=2)
+        self.add(numberplane)
+        v1=self.add_vector([1,2], color=MAROON_C)
+        v2=self.add_vector([0.5,1], color=BLUE)
+        v1_label = self.label_vector(
+            v1, self.vector1_label, color = self.vector1_color,
+        )
+        v2_label = self.label_vector(
+            v2, self.vector2_label, color = self.vector2_color,
+        )
+        def get_len_txt(vector, factor):
+            return str(vector.get_length()*factor)[0:4]
+
+        v1scaled = v1.copy()
+        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
+        
+        v2scaled = v2.copy()
+        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.9))).next_to(v2_label).shift([-1.35,0,0]).scale(0.7).add_background_rectangle())
+        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
+        
+        self.remove(v2)
+        v1_label.add_updater(lambda object: object.move_to(
+            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
+            np.array([-0.05,0.5,0])))
+        v2_label.add_updater(lambda object: object.move_to(
+            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
+            np.array([-0.3,0.2,0])))
+        self.add(textv1, textv2)
+
+        self.play(v2scaled.animate.shift(v1scaled.get_end()))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.remove(v1)
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.5,3,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [0.7,2*0.7,0]))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-1,-2,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[-0.75,-1.5,0]))
+        v2rightnow = v2.get_end()-v2.get_start()
+        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
+        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2*1.25,0]))
+        v2scaled.clear_updaters()
+        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
+        self.wait()
+7
+class EvenMoreUnluckyCase(VectorSlide):
+    def construct(self):
+        self.vector1 = [1, 2]
+        self.vector2 = [3, -1]
+        self.vector1_color = MAROON_C
+        self.vector2_color = BLUE
+        self.vector1_label = "v"
+        self.vector2_label = "w"
+        self.sum_color = PINK
+        self.scalar_pairs = [
+                (1.5, 0.6),
+                (0.7, 1.3),
+                (-1, -1.5),
+                (1, -1.13),
+                (1.25, 0.5),
+                (-0.8, 1.3),
+            ]
+        numberplane = NumberPlane(faded_line_ratio=2)
+        self.add(numberplane)
+        v1=self.add_vector([1,2], color=MAROON_C, animate=False)
+        v2=self.add_vector([3,-1], color=BLUE, animate=False)
+        self.add(v1,v2)
+        dot = Dot()
+        self.play(Transform(v1,dot), Transform(v2, dot))
+        self.wait()
+
+class LinearCombinationsWithSumCopies(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
         self.vector2 = [3, -1]
@@ -602,98 +692,7 @@ class LinearCombinationsWithSumCopies(VectorSlide):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), [3,-2.9,0]))
         self.add(v3.copy().clear_updaters())
-6
-class UnluckyCase(VectorSlide):
-    def construct(self):
-        self.vector1 = [1, 2]
-        self.vector2 = [3, -1]
-        self.vector1_color = MAROON_C
-        self.vector2_color = BLUE
-        self.vector1_label = "v"
-        self.vector2_label = "w"
-        self.sum_color = PINK
-        self.scalar_pairs = [
-                (1.5, 0.6),
-                (0.7, 1.3),
-                (-1, -1.5),
-                (1, -1.13),
-                (1.25, 0.5),
-                (-0.8, 1.3),
-            ]
-        numberplane = NumberPlane(faded_line_ratio=2)
-        self.add(numberplane)
-        v1=self.add_vector([1,2], color=MAROON_C)
-        v2=self.add_vector([0.5,1], color=BLUE)
-        v1_label = self.label_vector(
-            v1, self.vector1_label, color = self.vector1_color,
-        )
-        v2_label = self.label_vector(
-            v2, self.vector2_label, color = self.vector2_color,
-        )
-        def get_len_txt(vector, factor):
-            return str(vector.get_length()*factor)[0:4]
-
-        v1scaled = v1.copy()
-        textv1 = Tex(get_len_txt(v1scaled,0.4477)).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v1scaled,0.4477))).next_to(v1_label).shift([-1.3,0,0]).scale(0.7).add_background_rectangle())
         
-        v2scaled = v2.copy()
-        textv2 = Tex(get_len_txt(v2scaled, 0.3157)).next_to(v2_label).shift([-1.4,-0.3,0]).scale(0.7).add_background_rectangle().add_updater(lambda text: text.become(Tex(get_len_txt(v2scaled, 0.9))).next_to(v2_label).shift([-1.35,0,0]).scale(0.7).add_background_rectangle())
-        #print(np.linalg.norm(np.array((v1scaled.get_end()-v1scaled.get_start())/2)))
-        
-        self.remove(v2)
-        v1_label.add_updater(lambda object: object.move_to(
-            np.array((v1scaled.get_end()-v1scaled.get_start())/2+v1scaled.get_start()) + 
-            np.array([-0.05,0.5,0])))
-        v2_label.add_updater(lambda object: object.move_to(
-            np.array((v2scaled.get_end()-v2scaled.get_start())/2+v2scaled.get_start()) + 
-            np.array([-0.3,0.2,0])))
-        self.add(textv1, textv2)
-
-        self.play(v2scaled.animate.shift(v1scaled.get_end()))
-        v2rightnow = v2.get_end()-v2.get_start()
-        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
-        self.remove(v1)
-        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.5,3,0]))
-        v2scaled.clear_updaters()
-        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
-        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+0.6*v2rightnow))
-        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [0.7,2*0.7,0]))
-        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [-1,-2,0]))
-        v2scaled.clear_updaters()
-        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[-0.75,-1.5,0]))
-        v2rightnow = v2.get_end()-v2.get_start()
-        v2scaled.add_updater(lambda me: me.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+v2rightnow))
-        self.play(v1scaled.animate.put_start_and_end_on(ORIGIN, [1.25,2*1.25,0]))
-        v2scaled.clear_updaters()
-        self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
-        self.wait()
-7
-class EvenMoreUnluckyCase(VectorSlide):
-    def construct(self):
-        self.vector1 = [1, 2]
-        self.vector2 = [3, -1]
-        self.vector1_color = MAROON_C
-        self.vector2_color = BLUE
-        self.vector1_label = "v"
-        self.vector2_label = "w"
-        self.sum_color = PINK
-        self.scalar_pairs = [
-                (1.5, 0.6),
-                (0.7, 1.3),
-                (-1, -1.5),
-                (1, -1.13),
-                (1.25, 0.5),
-                (-0.8, 1.3),
-            ]
-        numberplane = NumberPlane(faded_line_ratio=2)
-        self.add(numberplane)
-        v1=self.add_vector([1,2], color=MAROON_C, animate=False)
-        v2=self.add_vector([3,-1], color=BLUE, animate=False)
-        self.add(v1,v2)
-        dot = Dot()
-        self.play(Transform(v1,dot), Transform(v2, dot))
-        self.wait()
-8
 class NameLinearCombinations2(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
