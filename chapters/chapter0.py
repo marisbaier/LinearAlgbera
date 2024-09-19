@@ -1,11 +1,84 @@
 from manim import *
 from manim_slides import Slide
 
-from config import VectorSlide
+from config import VectorSlide # Why is this here?
 
 
 class Intro(Slide):
     def construct(self):
+
+        Title = Text("Lineare Algebra", font_size=60)
+        subtitle = Text("Eine Einführung", font_size=30, color=GREY).shift(DOWN)
+        self.add(Title, subtitle)
+        self.wait()
+
+        Info = [
+            "Maris, 6tes Semester Physik",
+            "Schlagzeug, Klettern, Rathaus 10 in Clash of Clans",
+            "Koordinator des Peer-Mentoring-Programms",
+        ]
+
+        texts = VGroup()
+        for text in Info:
+            texts.add(Text(text, font_size=30))
+
+        texts.arrange(DOWN, buff=0.5)
+
+        self.next_section()
+        self.remove(Title, subtitle)
+        Title = Text("Hallo!").to_edge(UP)
+        self.play(Write(Title))
+        for text in texts:
+            text.to_edge(LEFT).shift(0.8*UP)
+            self.play(Write(text))
+            self.next_section()
+        
+        me = ImageMobject("src/images/Me.jpg").shift(4*LEFT+2*DOWN)
+        self.add(me)
+        self.wait()
+        V1 = ImageMobject("src/images/bikepacking1.jpg").scale(0.3).shift(3.5*RIGHT+2*DOWN)
+        self.add(V1)
+        self.wait()
+        self.next_section()
+        V2 = ImageMobject("src/images/bikepacking2.jpg").scale(0.1).shift(3.5*RIGHT+2*DOWN)
+        self.remove(V1)
+        self.add(V2)
+        self.wait()
+        self.next_section()
+
+        Title2 = Text("Bezüglich dieser Vorlesung").to_edge(UP)
+        self.remove(me, V2)
+        for text in texts:
+            self.remove(text)
+        self.play(Transform(Title, Title2))
+
+        Info = [
+            "Vortrag von 3h, aufgeteilt in 2x 1.5h",
+            "-> keine Angst, wir werden Pausen machen",
+            "Live-Stream über Zoom, Upload auf Moodle",
+            "Mentimeter für Fragen und Feedback",
+            "Gesamte Präsentation verfügbar unter",
+            "people.physik.hu-berlin.der/~baierluc/LinearAlgebra"
+        ]
+
+        texts = VGroup()
+        for text in Info:
+            texts.add(Text(text, font_size=30))
+
+        texts.arrange(DOWN, buff=0.5)
+        self.next_section()
+
+        self.play(Write(texts[0].to_edge(LEFT)),Write(texts[1].to_edge(LEFT)))
+        self.next_section()
+        self.play(Write(texts[2].to_edge(LEFT)))
+        self.next_section()
+        self.play(Write(texts[3].to_edge(LEFT)))
+        self.next_section()
+        self.play(Write(texts[4].to_edge(LEFT)), Write(texts[5].to_edge(LEFT)))
+        self.next_section()
+        for text in texts:
+            self.remove(text)
+        self.remove(Title)
 
         V1 = ImageMobject("src/images/BSc_2022_Studienplan.jpg")
         V2 = ImageMobject("src/images/Studienverlaufsplan.png")
@@ -53,8 +126,63 @@ class Intro(Slide):
         self.wait()
         self.next_slide()
 
-        linear = Text("linear?")
         self.remove(Title,Subtitle)
+
+        title = Text("Lineare Algebra").to_edge(UP)
+        self.play(Write(title))
+
+        Info = [
+            "Fundamentaler Baustein für fast alle Bereiche der Mathematik",
+            "Geometrie: Vektorräume, Rotationen, Spiegelungen",
+            "Funktionalanalysis: unendlichdimensionale Vektorräume",
+            "In den Naturwissenschaften: Um Naturgesetze zu beschreiben",
+            "-> Auch nichtlineare Phänomene lassen sich oft linear approximieren",
+        ]
+
+        texts = VGroup()
+        for text in Info:
+            texts.add(Text(text, font_size=30))
+
+        texts.arrange(DOWN, buff=0.5)
+
+        for text in texts:
+            text.to_edge(LEFT)
+            self.play(Write(text))
+            self.next_section()
+
+        for text in texts:
+            self.remove(text)
+        self.remove(title)
+
+        Today = Text("In diesem Vortrag").to_corner(UP+LEFT)
+        self.play(Write(Today))
+        self.next_section()
+
+        LineareAbbildungen = Text("- Lineare Abbildungen", font_size=30)
+        linAbSpannDim = Text("Lineare Abhängigkeit, Spann, Dimension", font_size=25)
+        VisuelleVorstellung = Text("Visuelle Intuition", font_size=25)
+        LineareGleichungssysteme = Text("- Lineare Gleichungssysteme", font_size=30)
+        VisuelleVorstellung2 = Text("Visuelle Intuition", font_size=25)
+        Gauß = Text("Gauß-Algorithmus", font_size=25)
+        texts = VGroup(LineareAbbildungen, linAbSpannDim, VisuelleVorstellung, LineareGleichungssysteme, VisuelleVorstellung2, Gauß)
+        texts.arrange(DOWN, buff=0.5)
+
+        self.play(Write(texts[0].to_edge(LEFT)))
+        self.next_section()
+        self.play(Write(texts[1].to_edge(LEFT, buff=1)))
+        self.next_section()
+        self.play(Write(texts[2].to_edge(LEFT, buff=1)))
+        self.next_section()
+        self.play(Write(texts[3].to_edge(LEFT)))
+        self.next_section()
+        self.play(Write(texts[4].to_edge(LEFT, buff=1)))
+        self.next_section()
+        self.play(Write(texts[5].to_edge(LEFT, buff=1)))
+
+        for text in texts:
+            self.remove(text)
+
+        linear = Text("linear?")
         self.wait(0.2)
         self.play(Write(linear))
 

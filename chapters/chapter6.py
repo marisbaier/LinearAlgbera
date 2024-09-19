@@ -14,10 +14,10 @@ class UsefulnessOfMatrices(Slide):
         title1 = Tex("Visuelle Interpretation")
         title1.set_color(YELLOW)
         title1.to_edge(UP)
-        V1 = ImageMobject("src/images/logo_flipped.png")
-        V1.scale(0.6)
-        V1.to_corner(DOWN+RIGHT).shift(DOWN*2.5)
-        self.add(V1)
+        FachiniAdler = ImageMobject("src/images/logo_flipped.png")
+        FachiniAdler.scale(0.6)
+        FachiniAdler.to_corner(DOWN+RIGHT).shift(DOWN*2.5)
+        self.add(FachiniAdler)
         e0 = Ellipse(width=1.35, height=0.7, color=WHITE)
         e1 = Ellipse(width=0.8, height=0.45, color=WHITE)
         e2 = Ellipse(width=0.45, height=0.2, color=WHITE)
@@ -58,7 +58,7 @@ class UsefulnessOfMatrices(Slide):
         """)
         equations.to_edge(RIGHT, buff = 2)
         self.next_slide()
-        self.play(Write(equations))
+        self.play(FachiniAdler.animate.shift(DOWN+RIGHT), Write(equations))
         #self.play(Create(equations[0][1].copy().shift([-2,0,0])))
         syms = VGroup(*[equations[0][i] for i in [1, 4, 7]])
         new_syms = VGroup(*[
@@ -599,8 +599,8 @@ class LinearSystemTransformationSceneTwoButFaster(LinearTransformationSlide):
         self.add(x)
         self.add(x_label)
         self.add(VGroup(x, x_label).copy().fade())
-        self.moving_mobjects = []
         self.wait(1)
+        self.moving_mobjects = []
         self.apply_transposed_matrix(matrix, run_time=1)
         self.next_slide()
 
@@ -681,7 +681,7 @@ class IntoLowerDimension(LinearSystemTransformationSlide):
     def construct(self):
         self.setup()
         self.play_animation()
-        words = Tex("A bildet auf einen Unterraum ab:").shift(1.5*UP+1.5*LEFT)
+        words = Tex("A bildet auf einen Unterraum ab:").shift(1.5*UP+2.5*LEFT)
         words.add_background_rectangle()
         self.play(Write(words, run_time = 1))
         self.add_foreground_mobject(words)
@@ -694,7 +694,7 @@ class Bijektiv(LinearSystemTransformationSlide):
         self.t_matrix = np.array([[1, 0.2], [0.2, 1]])
         self.moving_mobjects = []
         self.apply_transposed_matrix(self.t_matrix)
-        words = Tex("A bleibt in "+r'$\mathbb{R}^2$:').shift(1.5*UP+1.5*LEFT)
+        words = Tex("A bleibt in "+r'$\mathbb{R}^2$:').shift(1.5*UP+2.5*LEFT)
         words.add_background_rectangle()
         self.play(Write(words, run_time = 1))
         self.add_foreground_mobject(words)
