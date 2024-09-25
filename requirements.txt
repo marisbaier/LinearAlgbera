@@ -1,3 +1,4 @@
 manim==0.18.1
 manim-slides==5.1.7
 PySide6==6.5.2
+importlib-metadata==8.4.0
