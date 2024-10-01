@@ -1,7 +1,7 @@
 from manim import *
 from manim_slides import Slide
 
-from config import VectorSlide # Why is this here?
+from config import VectorSlide
 
 
 class Intro(Slide):
@@ -120,7 +120,7 @@ class Intro(Slide):
         self.wait()
         self.next_slide()
 
-        Subtitle = Tex("...und wozu braucht man Vektorräume?", font_size=25, color=GREY).shift(0.7*DOWN) # , opacity=0.7
+        Subtitle = Tex("...und wozu braucht man Vektorräume?", font_size=25, color=GREY).shift(0.7*DOWN)
         self.play(Write(Subtitle, run_time=1.5))
 
         self.wait()
@@ -154,18 +154,18 @@ class Intro(Slide):
             self.remove(text)
         self.remove(title)
 
-        Today = Text("In diesem Vortrag").to_corner(UP+LEFT)
+        Today = Text("In diesem Vortrag", font_size=30).to_corner(UP+LEFT)
         self.play(Write(Today))
         self.next_section()
 
-        LineareAbbildungen = Text("- Lineare Abbildungen", font_size=30)
-        linAbSpannDim = Text("Lineare Abhängigkeit, Spann, Dimension", font_size=25)
-        VisuelleVorstellung = Text("Visuelle Intuition", font_size=25)
-        LineareGleichungssysteme = Text("- Lineare Gleichungssysteme", font_size=30)
-        VisuelleVorstellung2 = Text("Visuelle Intuition", font_size=25)
-        Gauß = Text("Gauß-Algorithmus", font_size=25)
+        LineareAbbildungen = Text("- Lineare Abbildungen", font_size=24)
+        linAbSpannDim = Text("Lineare Abhängigkeit, Spann, Dimension", font_size=18)
+        VisuelleVorstellung = Text("Visuelle Intuition", font_size=18)
+        LineareGleichungssysteme = Text("- Lineare Gleichungssysteme", font_size=24)
+        VisuelleVorstellung2 = Text("Visuelle Intuition", font_size=18)
+        Gauß = Text("Gauß-Algorithmus", font_size=18)
         texts = VGroup(LineareAbbildungen, linAbSpannDim, VisuelleVorstellung, LineareGleichungssysteme, VisuelleVorstellung2, Gauß)
-        texts.arrange(DOWN, buff=0.5)
+        texts.arrange(DOWN, buff=0.35).shift(0.5*UP)
 
         self.play(Write(texts[0].to_edge(LEFT)))
         self.next_section()
@@ -179,11 +179,41 @@ class Intro(Slide):
         self.next_section()
         self.play(Write(texts[5].to_edge(LEFT, buff=1)))
 
+        ImModul = Text("Im Modul LinA:", font_size=30).to_corner(UP+RIGHT).shift([-2.5,0,0])
+        V1 = ImageMobject("src/images/LinA_Inhaltsverzeichnis.png")
+        V1.scale(.8).to_edge(RIGHT).shift(0.2*DOWN+1.15*LEFT)
+        self.next_section()
+        self.play(Write(ImModul))
+        self.add(V1)
+        self.wait()
+
+        self.next_section()
+        self.remove(ImModul, V1, Today)
         for text in texts:
             self.remove(text)
 
+        text = Text("Was wir nicht behandeln werden").to_edge(UP)
+
+        Mengenlehre = Text("Mengenlehre", font_size=24).shift(3.5*LEFT+1.3*UP)
+        RingeUndKörper = Text("Ringe und Körper", font_size=24).shift(3.5*RIGHT+1.3*UP)
+        Vektorräume = Text("Vektorräume (formal):", font_size=24).shift(0.55*UP)
+        FormaleDefinitionen = ImageMobject("src/images/VektorraumDefinition.png").scale(0.85).shift(1.2*DOWN)
+
+        self.play(Write(text))
+        self.play(Write(Mengenlehre), Write(RingeUndKörper))
+        self.next_section()
+        self.play(Write(Vektorräume))
+        self.add(FormaleDefinitionen)
+        self.wait()
+
+        sehrvielmehr = Text("...und sehr, sehr (!) viel mehr", font_size=24).to_edge(DOWN+RIGHT)
+        self.next_section()
+        self.play(Write(sehrvielmehr))
+
+        self.next_section()
+        self.remove(text,Mengenlehre,RingeUndKörper,Vektorräume,FormaleDefinitionen,sehrvielmehr)
+
         linear = Text("linear?")
-        self.wait(0.2)
         self.play(Write(linear))
 
         self.wait()
@@ -245,6 +275,7 @@ class Intro(Slide):
         )
         self.play(ReplacementTransform(affine_func,linear_func))
 
+        self.next_section()
         self.wait()
 
         self.play(FadeOut(axis), FadeOut(linear_func))
