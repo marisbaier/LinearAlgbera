@@ -13,7 +13,7 @@ class Intro(Slide):
         self.wait()
 
         Info = [
-            "Maris, 6tes Semester Physik",
+            "Maris, 6. Semester Physik",
             "Schlagzeug, Klettern, Rathaus 10 in Clash of Clans",
             "Koordinator des Peer-Mentoring-Programms",
         ]
@@ -57,8 +57,8 @@ class Intro(Slide):
             "-> keine Angst, wir werden Pausen machen",
             "Live-Stream über Zoom, Upload auf Moodle",
             "Mentimeter für Fragen und Feedback",
-            "Gesamte Präsentation verfügbar unter",
-            "people.physik.hu-berlin.der/~baierluc/LinearAlgebra"
+            "Gesamte Präsentation verfügbar unter:",
+            "https://people.physik.hu-berlin.der/~baierluc/LinearAlgebra"
         ]
 
         texts = VGroup()
@@ -133,8 +133,8 @@ class Intro(Slide):
 
         Info = [
             "Fundamentaler Baustein für fast alle Bereiche der Mathematik",
-            "Geometrie: Vektorräume, Rotationen, Spiegelungen",
-            "Funktionalanalysis: unendlichdimensionale Vektorräume",
+            "Geometrie: Rotationen, Spiegelungen, Schnittpunkte",
+            "Themenzweig Funktionalanalysis: ∞-dimensionale Vektorräume",
             "In den Naturwissenschaften: Um Naturgesetze zu beschreiben",
             "-> Auch nichtlineare Phänomene lassen sich oft linear approximieren",
         ]
@@ -279,6 +279,36 @@ class Intro(Slide):
         self.wait()
 
         self.play(FadeOut(axis), FadeOut(linear_func))
+
+class ImportantDefinitions(Slide):
+    def construct(self):
+        bulletpoints = VGroup(*[Text(a) for a in [
+            "Funktionsgleichung:",
+            "Nur Zuordnungsvorschrift:",
+            "Eindeutige Zuordnungsvorschrift:"
+        ]])
+        bulletpoints.arrange(DOWN, buff=2).shift(UP*0.5).scale(0.8)
+
+        for (point, formula) in zip(bulletpoints, [
+            Tex(r'$f(x)=x^2$'),
+            Tex(r'$x \mapsto x^2$'),
+            Tex(r'$f: A\to B \quad x \mapsto x^2$')
+        ]):
+            formula.next_to(point, DOWN)
+            self.play(Write(point), Write(formula))
+            self.next_section()
+        twovectors = VGroup(*[
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-1.7,-3.1,0],[-1.35,-2.7,0]).set_color(YELLOW),
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([0.3,-3.1,0],[-0.05,-2.7,0]).set_color(BLUE),
+            ])
+        """ self.play(Create(e1)) """
+        Definitionsbereich = Text("Definitionsbereich", font_size=14, color=YELLOW).move_to(twovectors[0].get_start()+[0,-0.2,0])
+        Zielmenge = Text("Zielmenge", font_size=14, color=BLUE).move_to(twovectors[1].get_start()+[0,-0.2,0])
+        self.play(Create(twovectors[0]), Create(Definitionsbereich))
+        self.next_section()
+        self.play(Create(twovectors[1]), Create(Zielmenge))
+        self.next_section()
+        self.wait()
 
 class VectorAddition(VectorSlide):
     def construct(self):

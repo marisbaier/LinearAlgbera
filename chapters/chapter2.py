@@ -401,7 +401,7 @@ class NameLinearCombinations(VectorSlide):
         rectangle = Rectangle(color=config.background_color, width=5.5, height=2.4, 
                               stroke_width=250).to_edge(UP+LEFT, buff=0)
         self.add(rectangle)
-        text = Tex(r'''"Linearkombinationen" von $\vec{v}$ und $\vec{w}$''', font_size=35)
+        text = Tex(r'''	\glqq Linearkombinationen\grqq{} von $\vec{v}$ und $\vec{w}$''', font_size=35)
         text[0][24:26].set_color(self.vector1_color)
         text[0][29:33].set_color(self.vector2_color)
         text.to_edge(UP+LEFT, buff=0.35)
