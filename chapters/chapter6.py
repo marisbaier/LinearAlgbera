@@ -2,7 +2,7 @@ from manim import *
 from manim_slides import Slide
 import itertools as it
 
-from config import LinearTransformationSlide, LinearSystemTransformationSlide
+from config import LinearSystemTransformationSlide
 
 
 class LinearTransformationSlide(Slide, LinearTransformationScene):

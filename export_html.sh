@@ -6,4 +6,4 @@ manim-slides convert TwoSuccessiveTransformations RotationThenShear RotationThen
 manim-slides convert stretchspace compressspace exactlyhowmuch exactlyhowmuch2 chapter5.html
 manim-slides convert UsefulnessOfMatrices ComplicatedSystem SystemOfEquations LinearSystemTransformationSceneOne LinearSystemTransformationSceneTwo ThinkAboutWhatsHappening LinearSystemTransformationSceneTwoButFaster SystemOfTwoEquationsTwoUnknowns IntoLowerDimension Bijektiv DeterminantZero Inverse1 Inverse2 chapter6.html
 
-scp -r *.html chapter*_assets/ pool:public_html/LinearAlgebra/
+scp -r *.html chapter*_assets/ baierluc@pool.physik.hu-berlin.de:public_html/LinearAlgebra/
