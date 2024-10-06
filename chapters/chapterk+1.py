@@ -73,7 +73,7 @@ class BeweisHinrichtung(Slide):
         self.next_section()
         self.play(Transform(text1,text1strich))
 
-        Quantoren = Tex(r'$\forall a,b\in \mathbb{R}^n\, \exists c,d\in\mathbb{R}^n:')
+        Quantoren = Tex(r'$\forall a,b\in \mathbb{R}^n\, \exists c,d\in\mathbb{R}^n:$')
         Quantoren.next_to(text2strich,UP)
         self.next_section()
         self.play(Write(Quantoren))
@@ -251,7 +251,7 @@ class NewDefinition(Slide):
         self.play(definition.animate.scale(0.7))
         self.play(definition.animate.shift(2*UP+3*RIGHT))
 
-        Frage = Tex(r"Ist $T: x\mapsto (x+y, y)$ linear?")
+        Frage = Tex(r"Ist $T: x\mapsto (x+y, y)$ linear?").shift(UP)
         Frage.scale(0.7).to_edge(LEFT)
         self.next_section()
         self.play(Write(Frage))
