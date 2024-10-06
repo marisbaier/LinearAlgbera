@@ -258,6 +258,7 @@ class CoordinatesAsScalarsExample(VectorSlide):
         print(self.mobjects)
         self.play(Create(equa))
 
+        self.next_section()
         Wasserhahn = ImageMobject("src/images/WasserHahnMitZweiGriffen.jpg").scale(0.5).to_corner(DOWN+RIGHT,buff=0.7)
         self.add(Wasserhahn)
         self.wait()

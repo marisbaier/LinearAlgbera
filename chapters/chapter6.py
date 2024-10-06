@@ -26,15 +26,24 @@ class UsefulnessOfMatrices(Slide):
         e2.shift(RIGHT*4+DOWN*0.9)
         self.next_section()
         self.play(Write(title1))
-        cube = Cube().rotate(PI/8, axis=UP+LEFT)
-        cube.set_color(GREEN)
+
+        rotation = ImageMobject("src/images/3dRotation.png")
+        rotation2 = ImageMobject("src/images/rotation2.png")
+        rotation2.scale(0.9).shift(0.7*RIGHT)
+        rotation.scale(0.8)
+        rotation.shift(LEFT*3)
+        """ cube = Cube().rotate(PI/8, axis=UP+LEFT)
+        cube.set_color(GREEN) """
         self.next_section()
         axes = ThreeDAxes()
         self.play(Create(e1), Create(e2))
-        self.play(cube.animate.rotate(PI/3, axis=RIGHT))
-        self.play(cube.animate.rotate(PI/3, axis=UP))
+        """ self.play(cube.animate.rotate(PI/3, axis=RIGHT))
+        self.play(cube.animate.rotate(PI/3, axis=UP)) """
+        self.add(rotation,rotation2)
+
+        self.wait()
         self.next_section()
-        self.remove(cube, e1, e2)
+        self.remove(rotation, rotation2, e1, e2)
 
         title = Tex("Nützlichkeit von Matrizen")
         title.set_color(YELLOW)

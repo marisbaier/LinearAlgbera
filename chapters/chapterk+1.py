@@ -74,7 +74,7 @@ class BeweisHinrichtung(Slide):
         self.play(Transform(text1,text1strich))
 
         Quantoren = Tex(r'$\forall a,b\in \mathbb{R}^n\, \exists c,d\in\mathbb{R}^n:$')
-        Quantoren.next_to(text2strich,UP)
+        Quantoren.next_to(text1strich,UP)
         self.next_section()
         self.play(Write(Quantoren))
         self.next_section()
