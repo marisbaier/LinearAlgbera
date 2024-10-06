@@ -13,14 +13,14 @@ class Intro(Slide):
         self.wait()
 
         Info = [
-            "Maris, 6. Semester Physik",
-            "Schlagzeug, Klettern, Rathaus 10 in Clash of Clans",
-            "Koordinator des Peer-Mentoring-Programms",
+            "Maris, irgendwas mit Physik",
+            "Schlagzeug, Klettern, leider nur Rathaus 10 in Clash of Clans",
+            r"kommt zum Peer-Mentoring-Programm, es ist \textit{sehr gut}",
         ]
 
         texts = VGroup()
         for text in Info:
-            texts.add(Text(text, font_size=30))
+            texts.add(Tex(text, font_size=30))
 
         texts.arrange(DOWN, buff=0.5)
 
@@ -120,7 +120,7 @@ class Intro(Slide):
         self.wait()
         self.next_slide()
 
-        Subtitle = Tex("...und wozu braucht man Vektorräume?", font_size=25, color=GREY).shift(0.7*DOWN)
+        Subtitle = Tex("...und wozu braucht man Vektorraeume?", font_size=25, color=GREY).shift(0.7*DOWN)
         self.play(Write(Subtitle, run_time=1.5))
 
         self.wait()
@@ -134,7 +134,7 @@ class Intro(Slide):
         Info = [
             "Fundamentaler Baustein für fast alle Bereiche der Mathematik",
             "Geometrie: Rotationen, Spiegelungen, Schnittpunkte",
-            "Themenzweig Funktionalanalysis: ∞-dimensionale Vektorräume",
+            "Themenzweig Funktionalanalysis: ∞-dimensionale Vektorraeume",
             "In den Naturwissenschaften: Um Naturgesetze zu beschreiben",
             "-> Auch nichtlineare Phänomene lassen sich oft linear approximieren",
         ]
@@ -195,14 +195,14 @@ class Intro(Slide):
         text = Text("Was wir nicht behandeln werden").to_edge(UP)
 
         Mengenlehre = Text("Mengenlehre", font_size=24).shift(3.5*LEFT+1.3*UP)
-        RingeUndKörper = Text("Ringe und Körper", font_size=24).shift(3.5*RIGHT+1.3*UP)
-        Vektorräume = Text("Vektorräume (formal):", font_size=24).shift(0.55*UP)
+        RingeUndKoerper = Text("Ringe und Körper", font_size=24).shift(3.5*RIGHT+1.3*UP)
+        Vektorraeume = Text("Vektorraeume (formal):", font_size=24).shift(0.55*UP)
         FormaleDefinitionen = ImageMobject("src/images/VektorraumDefinition.png").scale(0.85).shift(1.2*DOWN)
 
         self.play(Write(text))
-        self.play(Write(Mengenlehre), Write(RingeUndKörper))
+        self.play(Write(Mengenlehre), Write(RingeUndKoerper))
         self.next_section()
-        self.play(Write(Vektorräume))
+        self.play(Write(Vektorraeume))
         self.add(FormaleDefinitionen)
         self.wait()
 
@@ -211,7 +211,7 @@ class Intro(Slide):
         self.play(Write(sehrvielmehr))
 
         self.next_section()
-        self.remove(text,Mengenlehre,RingeUndKörper,Vektorräume,FormaleDefinitionen,sehrvielmehr)
+        self.remove(text,Mengenlehre,RingeUndKoerper,Vektorraeume,FormaleDefinitionen,sehrvielmehr,Today)
 
         linear = Text("linear?")
         self.play(Write(linear))
@@ -284,8 +284,8 @@ class ImportantDefinitions(Slide):
     def construct(self):
         bulletpoints = VGroup(*[Text(a) for a in [
             "Funktionsgleichung:",
-            "Nur Zuordnungsvorschrift:",
-            "Eindeutige Zuordnungsvorschrift:"
+            "Zuordnung:",
+            "Noch präziser:"
         ]])
         bulletpoints.arrange(DOWN, buff=2).shift(UP*0.5).scale(0.8)
 
@@ -307,7 +307,37 @@ class ImportantDefinitions(Slide):
         self.play(Create(twovectors[0]), Create(Definitionsbereich))
         self.next_section()
         self.play(Create(twovectors[1]), Create(Zielmenge))
+        self.wait()
+
+class ImportantConcepts(Slide):
+    def construct(self):
+        definition = Tex(r'Wenn z.B.: $f:x\mapsto x^2$, dann:').shift(UP)
+        math = Tex(r'$f(\mathbb{R})=\mathbb{R}_+$')
+        explain = Tex(r'$:=\{x\in \mathbb{R} \mid x\geq 0\}$')
+        group = VGroup(math,explain).arrange()
+        group.shift(0.6*DOWN)
+
+        self.play(Write(definition))
         self.next_section()
+        self.play(Write(group[0]))
+        self.wait()
+        self.next_section()
+        self.play(Write(group[1]))
+
+        text = Tex(r'Das \glqq Bild\grqq{} der Menge $\mathbb{R}$ unter \\ der Abbildung $f:x\mapsto x^2$ sind \\ die positiven reellen Zahlen!')
+        text.shift(2.2*DOWN).scale(0.7)
+        self.next_section()
+        self.play(Write(text))
+
+        self.next_section()
+        self.remove(group[0], group[1], text)
+        Frage = Tex(r'Was ist das \textit{Bild} von $5$ unter $f$?').scale(0.8).shift(DOWN*0.8)
+        Antwort = Tex(r'$\Rightarrow$ 25')
+        Antwort.next_to(Frage,DOWN)
+        self.play(Write(Frage))
+        self.next_section()
+        self.play(Write(Antwort))
+
         self.wait()
 
 class VectorAddition(VectorSlide):
@@ -321,10 +351,42 @@ class VectorAddition(VectorSlide):
 
         self.next_slide()
 
-        v = Vector([1,2], color=self.vector1_color, stroke_width=2)
+        v = Vector([1,2], color=self.vector1_color)
         self.play(Create(v))
 
-        v1_label = self.label_vector(
+        Physikmensch = ImageMobject("src/images/Physikmensch.png").scale(0.85).shift(5*LEFT+2*DOWN)
+        self.add(Physikmensch)
+
+        w = Vector([2,-1], color=MAROON_C).shift([-4,2,0])
+        label = Tex(r'$\vec{v}$').next_to(w,(UP+RIGHT)/4).shift(LEFT+DOWN*0.3)
+        label.set_color(MAROON_C).scale(1.2).add_background_rectangle()
+        self.play(Transform(v,w))
+        self.play(Write(label))
+        group = VGroup(w,label)
+
+        self.next_section()
+        Wasserhahn = ImageMobject("src/images/WasserHahnMitZweiGriffen.jpg").scale(0.6)
+        self.add(Wasserhahn)
+        self.wait()
+
+        self.next_section()
+        Informatikmensch = ImageMobject("src/images/Informatiker.png").scale(0.85).shift(2*DOWN)
+        Vektor = Matrix([[3],[1]]).set_color(MAROON_C).shift(1*UP).set_z_index(30).add_background_rectangle()
+        Vektor.next_to(Informatikmensch,UP,0.5)
+        self.add(Informatikmensch)
+        self.remove(Wasserhahn, v)
+        self.play(group.animate.shift(DOWN+2*LEFT))
+        self.wait(0.3)
+        self.play(Create(Vektor))
+        self.wait()
+
+        Mathemensch = ImageMobject("src/images/Bibbrainmath.jpg").scale(0.35).shift(2*DOWN+5*RIGHT)
+        VektorraumDef = ImageMobject("src/images/VektorraumDefinition.png").scale(0.6).to_edge(RIGHT).shift(0.5*UP)
+        self.add(Mathemensch, VektorraumDef)
+        self.wait()
+
+
+        """ v1_label = self.label_vector(
             v, self.vector1_label, color = self.vector1_color,
         )
 
@@ -333,4 +395,4 @@ class VectorAddition(VectorSlide):
 
         v1_label = self.label_vector(
             v, self.vector1_label, color = self.vector1_color,
-        )
+        ) """

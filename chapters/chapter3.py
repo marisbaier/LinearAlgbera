@@ -191,6 +191,7 @@ class MultipleVectors(Slide):
         ])
         vectors.set_submobject_colors_by_gradient(PINK, PURE_BLUE, BLUE, GREEN_E, YELLOW)
         self.play(Create(vectors, lag_ratio = 0.5))
+        self.wait()
         t_matrix = [[2, 1], [1, 2]]
         transformed_vectors = VGroup(*[
             Vector(
@@ -891,7 +892,7 @@ class CompletelyDescribed(LinearTransformationSlide):
             Matrix([[3],[-2]]).set_column_colors(GREEN),
             Tex("+7"),
             Matrix([[2],[1]]).set_column_colors(RED),
-        ).arrange()
+        ).arrange().shift(DOWN)
         self.play(Transform(VGroup(matrix,input).copy(),group))
 
         self.wait()
@@ -913,9 +914,9 @@ class CompletelyDescribed(LinearTransformationSlide):
         self.play(Create(VGroup(input,brace)), Write(bracetext))
 
         group = VGroup(
-            Tex("x"),
+            Tex("$x$"),
             Matrix([["a"],["c"]]).set_column_colors(GREEN),
-            Tex("+y"),
+            Tex("+ $y$"),
             Matrix([["b"],["d"]]).set_column_colors(RED),
             Tex("="),
             Matrix([["ax+by"],["cx+dy"]]),
@@ -976,7 +977,7 @@ class isntitmorefun(LinearTransformationSlide):
 
         self.play(Create(Vector([-1,3,0], color=YELLOW)))
 38
-class letspractise(LinearTransformationSlide):
+class RotationPlus(LinearTransformationSlide):
     def __init__(self):
         LinearTransformationSlide.__init__(
             self,
@@ -1024,8 +1025,14 @@ class letspractise(LinearTransformationSlide):
         self.moving_mobjects = []
         self.apply_transposed_matrix([[0,1],[-1,0]])
 
-        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT)
+        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT).add_background_rectangle()
         self.play(Write(xvector))
+        self.next_section()
+        result = VGroup(
+            Tex("="),
+            Matrix([["-y"],["x"]]).add_background_rectangle(),
+        ).arrange().next_to(xvector,RIGHT)
+        self.play(Write(result))
 39
 class funTrafo(LinearTransformationSlide):
     def __init__(self):
@@ -1051,11 +1058,11 @@ class funTrafo(LinearTransformationSlide):
 
         self.apply_transposed_matrix([[1,0],[1,1]])
 
-        text = Tex(r'''"Scheerung"''').shift(DOWN).add_background_rectangle()
+        text = Tex(r'''\glqq Scheerung\grqq{}''').shift(DOWN).add_background_rectangle()
         self.play(Write(text))
 
-        m1 = Matrix([[1],[0]]).set_color(GREEN).shift(2*RIGHT +0.2*UP).set_z_index(30)
-        m2 = Matrix([[1],[1]]).set_color(RED).shift(RIGHT+UP).set_z_index(31)
+        m1 = Matrix([[1],[0]]).set_color(GREEN).shift(2*RIGHT+0.2*UP).set_z_index(30)
+        m2 = Matrix([[1],[1]]).set_color(RED).shift(1.7*RIGHT+UP).set_z_index(31)
 
         self.next_slide()
         self.play(Write(m1))
@@ -1064,7 +1071,7 @@ class funTrafo(LinearTransformationSlide):
         self.next_slide()
         self.play(Write(m2))
         self.next_slide()
-        self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([-1,-0.05,0]), m2[0][1].animate.shift([-5,1.65,0]).shift([-1,-0.05,0]), FadeOut(m2[1]), FadeOut(m2[2]))
+        self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([-1,-0.05,0]-0.7*RIGHT), m2[0][1].animate.shift([-5,1.65,0]).shift([-1,-0.05,0]-0.7*RIGHT), FadeOut(m2[1]), FadeOut(m2[2]))
 
         self.wait()
 
@@ -1075,9 +1082,129 @@ class funTrafo(LinearTransformationSlide):
         self.moving_mobjects = []
         self.apply_transposed_matrix([[1,0],[1,1]])
 
-        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT)
+        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT).add_background_rectangle()
         self.play(Write(xvector))
-40
+        self.next_section()
+        result = VGroup(
+            Tex("="),
+            Matrix([["x+y"],["y"]]).add_background_rectangle(),
+        ).arrange().next_to(xvector,RIGHT)
+        self.play(Write(result))
+
+class RotationMinus(LinearTransformationSlide):
+    def __init__(self):
+        LinearTransformationSlide.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        emptymatrix = Matrix([["0","0"],["0","0"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        emptymatrix.add_background_rectangle()
+        emptymatrix[1][0] = Tex("")
+        emptymatrix[1][1] = Tex("")
+        emptymatrix[1][2] = Tex("")
+        emptymatrix[1][3] = Tex("")
+
+        self.add_foreground_mobject(emptymatrix)
+
+        self.apply_transposed_matrix([[0,-1],[1,0]])
+
+        text = Tex(r"90$\circ$ Drehung jetzt im Uhrzeigersinn").shift(2.5*DOWN).add_background_rectangle()
+        self.play(Write(text))
+
+        ex, ey = self.get_basis_vectors()
+
+        m1 = Matrix([[0],[-1]]).set_color(GREEN).shift(LEFT+DOWN).set_z_index(30)
+        m2 = Matrix([[1],[0]]).set_color(RED).shift(1.5*RIGHT).set_z_index(31)
+
+        self.next_slide()
+        self.play(Write(m1))
+        self.next_slide()
+        self.play(m1[0][0].animate.shift([-5,1.8,0]+2*UP), m1[0][1].animate.shift([-5,1.65,0]+2*UP), FadeOut(m1[1]), FadeOut(m1[2]))
+        self.next_slide()
+        self.play(Write(m2))
+        self.next_slide()
+        self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([1.9,0.8,0]+3.3*LEFT+0.2*UP), m2[0][1].animate.shift([-5,1.65,0]).shift([1.9,0.8,0]+3.3*LEFT+0.2*UP), FadeOut(m2[1]), FadeOut(m2[2]))
+
+        self.next_slide()
+        self.moving_mobjects = []
+        self.apply_inverse_transpose([[0,-1],[1,0]], run_time=1)
+        vnew = self.add_vector([1,2,0], color=YELLOW, max_tip_length_to_length_ratio=0.15)
+        self.moving_mobjects = []
+        self.apply_transposed_matrix([[0,-1],[1,0]])
+
+        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT).add_background_rectangle()
+        self.play(Write(xvector))
+        self.next_section()
+        result = VGroup(
+            Tex("="),
+            Matrix([["y"],["-x"]]).add_background_rectangle(),
+        ).arrange().next_to(xvector,RIGHT)
+        self.play(Write(result))
+
+class Streckung(LinearTransformationSlide):
+    def __init__(self):
+        LinearTransformationSlide.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        emptymatrix = Matrix([["0","0"],["0","0"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        emptymatrix.add_background_rectangle()
+        emptymatrix[1][0] = Tex("")
+        emptymatrix[1][1] = Tex("")
+        emptymatrix[1][2] = Tex("")
+        emptymatrix[1][3] = Tex("")
+
+        self.add_foreground_mobject(emptymatrix)
+
+        self.apply_transposed_matrix([[2,0],[0,2]])
+
+        text = Tex(r"Streckung den Faktor 2").shift(1.5*DOWN).add_background_rectangle()
+        self.play(Write(text))
+
+        ex, ey = self.get_basis_vectors()
+
+        m1 = Matrix([[2],[0]]).set_color(GREEN).shift(2.7*RIGHT).set_z_index(30)
+        m2 = Matrix([[0],[2]]).set_color(RED).shift(2*UP+LEFT).set_z_index(31)
+
+        self.next_slide()
+        self.play(Write(m1))
+        self.next_slide()
+        self.play(m1[0][0].animate.shift([-5,1.8,0]+UP+3.7*LEFT), m1[0][1].animate.shift([-5,1.65,0]+UP+3.7*LEFT), FadeOut(m1[1]), FadeOut(m1[2]))
+        self.next_slide()
+        self.play(Write(m2))
+        self.next_slide()
+        self.play(m2[0][0].animate.shift([-5,1.8,0]).shift([1.9,0.8,0]+3.3*LEFT+0.2*UP+2.5*RIGHT+2*DOWN), m2[0][1].animate.shift([-5,1.65,0]).shift([1.9,0.8,0]+3.3*LEFT+0.2*UP+2.5*RIGHT+2*DOWN), FadeOut(m2[1]), FadeOut(m2[2]))
+
+        self.next_slide()
+        self.moving_mobjects = []
+        self.apply_inverse_transpose([[2,0],[0,2]], run_time=1)
+        vnew = self.add_vector([1,2,0], color=YELLOW, max_tip_length_to_length_ratio=0.15)
+        self.moving_mobjects = []
+        self.apply_transposed_matrix([[2,0],[0,2]])
+
+        xvector = Matrix([["x"],["y"]]).set_column_colors(YELLOW).next_to(emptymatrix,RIGHT).add_background_rectangle()
+        self.play(Write(xvector))
+        self.next_section()
+        result = VGroup(
+            Tex("="),
+            Matrix([["2x"],["2y"]]).add_background_rectangle(),
+        ).arrange().next_to(xvector,RIGHT)
+        self.play(Write(result))
+
 class UndAndersherum(Slide):
     def construct(self):
         text = Tex("Und andersherum?")
@@ -1112,6 +1239,36 @@ class UndAndersherum2(LinearTransformationSlide):
         m2 = Matrix([[3],[1]]).set_color(RED).shift(3.8*RIGHT +1*UP).set_z_index(30)
         self.apply_transposed_matrix([[-5,0],[3,1]])
         self.play(Transform(matrix.copy(),m2))
+
+class UndAndersherum3(LinearTransformationSlide):
+    def __init__(self):
+        LinearTransformationSlide.__init__(
+            self,
+            show_coordinates=False,
+            leave_ghost_vectors=False,
+            include_background_plane=True,
+            show_basis_vectors=True,
+            background_plane_kwargs={'faded_line_ratio':2}
+        )
+        self.setup()
+
+    def construct(self):
+        matrix = Matrix([["-1","0"],["0","-1"]]).to_corner(UP+LEFT).set_column_colors(GREEN,RED)
+        matrix.add_background_rectangle()
+        self.add(matrix)
+
+        self.wait()
+        self.next_slide()
+        self.moving_mobjects = []
+        m1 = Matrix([[-1],[0]]).set_color(GREEN).shift(1.8*LEFT).set_z_index(30).add_background_rectangle()
+        self.apply_transposed_matrix([[-1,0],[0,1]])
+        self.play(Transform(matrix.copy(),m1))
+
+        self.next_slide()
+        self.moving_mobjects = []
+        m2 = Matrix([[0],[-1]]).set_color(RED).shift(RIGHT+DOWN).set_z_index(30).add_background_rectangle()
+        self.apply_transposed_matrix([[1,0],[0,-1]])
+        self.play(Transform(matrix.copy(),m2))
 42
 class Mitmachspiel(Slide):
     def construct(self):
@@ -1140,13 +1297,13 @@ class Untervektorraum(LinearTransformationSlide):
         self.wait()
         self.next_slide()
         self.moving_mobjects = []
-        m1 = Matrix([[2],[1]]).set_color(GREEN).shift(1.7*RIGHT-0.6*UP).set_z_index(30)
+        m1 = Matrix([[2],[1]]).set_color(GREEN).shift(1.7*RIGHT-0.6*UP).set_z_index(30).add_background_rectangle()
         self.apply_transposed_matrix([[2,1],[0,1]])
         self.play(Transform(matrix.copy(),m1))
 
         self.next_slide()
         self.moving_mobjects = []
-        m2 = Matrix([[-2],[-1]]).set_color(RED).shift(-2.8*RIGHT).set_z_index(30)
+        m2 = Matrix([[-2],[-1]]).set_color(RED).shift(-1.35*RIGHT+2*DOWN).set_z_index(30)
         self.apply_transposed_matrix([[2,1],[-2,-1]])
         self.play(Transform(matrix.copy(),m2))
 44
@@ -1162,10 +1319,9 @@ class sumUp(LinearTransformationSlide):
         )
 
     def construct(self):
-        self.next_slide()
-        self.wait()
+        title = Tex("Zusammenfassung:").to_corner(UP+LEFT)
+        self.play(Write(title))
         self.moving_mobjects = []
-        self.next_slide()
         matrix = [[3, 1], [0, 2]]
         self.apply_matrix(matrix)
         self.wait(2)
@@ -1182,13 +1338,17 @@ class sumUp2(LinearTransformationSlide):
         LinearTransformationSlide.__init__(
             self,
             show_coordinates=False,
-            leave_ghost_vectors=True,
+            leave_ghost_vectors=False,
             include_background_plane=True,
             show_basis_vectors=True,
             background_plane_kwargs={'faded_line_ratio':2}
         )
 
     def construct(self):
+        title = Tex(r"Diese Abbildungen sind eindeutig(!) \\ durch die Bilder von $e_x,e_y$ bestimmt").scale(0.8).add_background_rectangle()
+        title.to_corner(UP+LEFT)
+        self.play(Write(title))
+        self.moving_mobjects = []
         self.apply_transposed_matrix([[3,-2],[2,1]])
         m1 = Matrix([[3],[-2]]).set_color(GREEN).shift(4*RIGHT-2*UP).set_z_index(30)
         m2 = Matrix([[2],[1]]).set_color(RED).shift(2.7*RIGHT+1*UP).set_z_index(31)
@@ -1210,9 +1370,9 @@ class sumUp2(LinearTransformationSlide):
         self.play(Write(text))
 
         twovectors = VGroup(*[
-            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-1.4,0,0],[-0.75,1.5,0]),
-            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([1.4,0,0],[0.85,1.5,0]),
-            ]).set_color(YELLOW)
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([-1.4,0,0],[-0.75,1.5,0]).set_color(GREEN),
+            Vector(max_tip_length_to_length_ratio=0.15).put_start_and_end_on([1.4,0,0],[0.85,1.5,0]).set_color(RED),
+            ])
         
         rec1 = Ellipse(color=GREEN, height=1.5,width=0.8).move_to(matrix.get_center()).shift(0.5*LEFT)
         rec2 = Ellipse(color=RED, height=1.5,width=0.8).move_to(matrix.get_center()).shift(0.85*RIGHT)
@@ -1264,13 +1424,64 @@ class YouCanInterpretMatrices(LinearTransformationSlide):
         self.wait()
         self.next_slide()
         self.moving_mobjects = []
-        m1 = Matrix([[1],[2]]).set_color(GREEN).shift(1.7*RIGHT +2.3*UP).set_z_index(30)
+        m1 = Matrix([[1],[2]]).set_color(GREEN).shift(1.7*RIGHT +2.3*UP).set_z_index(30).add_background_rectangle()
         self.apply_transposed_matrix([[1,2],[0,1]])
         self.play(Transform(matrix.copy(),m1))
 
         self.next_slide()
         self.moving_mobjects = []
-        m2 = Matrix([[3],[1]]).set_color(RED).shift(3.8*RIGHT +1*UP).set_z_index(30)
+        m2 = Matrix([[3],[1]]).set_color(RED).shift(3.8*RIGHT +1*UP).set_z_index(30).add_background_rectangle()
         self.apply_transposed_matrix([[-5,0],[3,1]])
         self.play(Transform(matrix.copy(),m2))
-47
+
+class ExampleFPR(Slide):
+    def construct(self):
+        title = Tex(r"Ein Beispiel aus der \glqq realen Welt\grqq{}:").to_corner(UP+LEFT)
+        self.play(Write(title))
+
+        Bild = ImageMobject("src/images/RTM.jpg").scale(0.75)
+        self.next_section()
+        self.add(Bild)
+        self.wait()
+
+        self.next_section()
+        self.remove(Bild)
+        Bild = ImageMobject("src/images/Graphen.png").scale(0.7)
+        self.add(Bild)
+        self.wait()
+
+        self.next_section()
+        self.remove(Bild)
+        Bild = ImageMobject("src/images/Graphit.png").scale(1)
+        self.add(Bild)
+        self.wait()
+
+        self.next_section()
+        self.remove(Bild)
+        Bild = ImageMobject("src/images/kleineSkalen.jpg").scale(1.5)
+        self.add(Bild)
+        self.wait()
+
+        self.next_section()
+        self.remove(Bild)
+        Bild = ImageMobject("src/images/FPR.png").scale(1.1)
+        self.add(Bild)
+        self.wait()
+
+        circ = Ellipse(width=1.5, height=1.7, color=RED).shift(1.3*LEFT+0.1*UP)
+        keinHexagon = Tex("kein Hexagon").shift(3*LEFT+3*DOWN)
+        line = Line(keinHexagon.get_top(),(circ.get_left()+circ.get_bottom())/2+(DOWN)/4, color=RED)
+
+        self.next_section()
+        self.play(Create(circ), Create(line), Write(keinHexagon))
+
+        goal = Tex("Ziel: Transformiere das Bild so, dass es ein Hexagon wird").shift(3*RIGHT+3*DOWN).scale(0.5).set_color(YELLOW)
+        self.next_section()
+        self.play(Write(goal))
+
+        self.next_section()
+        line = Line([2,0.5,0],[4,0.5,0], color=RED)
+        text = Tex(r'Lineare Abbildung auf \\ Bild angewendet').scale(0.5)
+        text.next_to(line,RIGHT)
+        text[0][0:16].set_color(YELLOW)
+        self.play(Create(line), Write(text))

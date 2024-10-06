@@ -604,28 +604,6 @@ class LinearSystemTransformationSceneTwoButFaster(LinearTransformationSlide):
         self.apply_transposed_matrix(matrix, run_time=1)
         self.next_slide()
 
-class LabeledExample(LinearSystemTransformationSlide):
-    CONFIG = {
-        "title" : "",
-        "t_matrix" : [[0, 0], [0, 0]],
-        "show_square" : False,
-    }
-    def setup(self):
-        LinearSystemTransformationSlide.setup(self)
-        title = Tex(self.title)
-        title.next_to(self.equation, DOWN, buff = 1)
-        title.add_background_rectangle()
-        title.shift_onto_screen()
-        self.add_foreground_mobject(title)        
-        self.title = title
-        if self.show_square:
-            self.add_unit_square()
-
-    def construct(self):
-        self.wait()
-        self.apply_transposed_matrix(self.t_matrix)
-        self.wait()
-
 class SystemOfTwoEquationsTwoUnknowns(Slide):
     def construct(self):
         system = Tex(r"""\begin{align*}

@@ -257,6 +257,10 @@ class CoordinatesAsScalarsExample(VectorSlide):
 
         print(self.mobjects)
         self.play(Create(equa))
+
+        Wasserhahn = ImageMobject("src/images/WasserHahnMitZweiGriffen.jpg").scale(0.5).to_corner(DOWN+RIGHT,buff=0.7)
+        self.add(Wasserhahn)
+        self.wait()
 # TODO: Transform(label, equa) is not working as it should
 
 class WhatIfWeChoseADifferentBasis(Slide):
@@ -552,7 +556,7 @@ class UnluckyCase(VectorSlide):
         v2scaled.clear_updaters()
         self.play(v2scaled.animate.put_start_and_end_on(v1scaled.get_end(), v1scaled.get_end()+[0.25,0.5,0]))
         self.wait()
-7
+
 class EvenMoreUnluckyCase(VectorSlide):
     def construct(self):
         self.vector1 = [1, 2]
@@ -1084,7 +1088,7 @@ class LinearDependence(ThreeDSlide):
         v1 = Vector(a, color=MAROON_C)
         v2 = Vector(b, color=BLUE)
         self.add(axes,v1,v2)
-        text = Tex(r'''"Lineare Abhängigkeit""''').add_background_rectangle()
+        text = Tex(r'''\glqq Lineare Abhängigkeit\grqq{}''').add_background_rectangle()
         text.to_corner(UP+RIGHT)
 
         self.add(axes,v1,v2)
